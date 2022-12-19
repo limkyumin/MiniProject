@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="A:\java 8 ver" version="1.8.0_351">
+<bootpath>
+<entry path="A:\java 8 ver\lib\resources.jar"/>
+<entry path="A:\java 8 ver\lib\rt.jar"/>
+<entry path="A:\java 8 ver\lib\jsse.jar"/>
+<entry path="A:\java 8 ver\lib\jce.jar"/>
+<entry path="A:\java 8 ver\lib\charsets.jar"/>
+<entry path="A:\java 8 ver\lib\jfr.jar"/>
+<entry path="A:\java 8 ver\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="A:\java 8 ver\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="A:\java 8 ver\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>
