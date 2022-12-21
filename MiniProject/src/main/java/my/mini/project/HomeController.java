@@ -36,4 +36,10 @@ public class HomeController {
 		return "home";
 	}
 	
+//	@RequestMapping("userEnroll.me")
+//	public String userEnroll() {
+//		
+//		return "user/userEnrollPage";
+//	}
+//	
 }
