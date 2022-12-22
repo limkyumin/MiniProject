@@ -44,13 +44,11 @@ public class UserController {
 		if(result>0) {
 			
 			session.setAttribute("alertMsg", "회원가입이 완료되었습니다");
-			System.out.println("가입찍히니?");
 			return "redirect:/";
 		
 		}else {
 			
 			model.addAttribute("errorMsg", "회원가입이 실패되었습니다");
-			System.out.println("에러찍히니?");
 			return "redirect:/";
 			
 		}

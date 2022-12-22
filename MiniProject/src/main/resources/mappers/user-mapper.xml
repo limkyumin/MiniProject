@@ -23,25 +23,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<insert id="insertUser" parameterType="user">
-		INSERT INTO MEMBER(
+		INSERT INTO USER_INFO(
+							USER_NO,
 							USER_ID,
 							USER_PWD,
 							USER_NAME,
 							USER_BIRTH,
 							USER_EMAIL,
 							USER_PHONE,
-							USER_ADDRESS,
-							ENROLL_DATE
+							USER_ADDRESS
 							)
 					VALUES(
+							SEQ_USNO.NEXTVAL,
 							#{userId},
-							#{userPWD},
+							#{userPwd},
 							#{userName},
 							#{userBirth},
 							#{userEmail},
 							#{userPhone},
-							#{userAddress},
-							#{enrollDate},
+							#{userAddress}
 							)
 	
 	</insert>

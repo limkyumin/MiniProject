@@ -9,7 +9,7 @@
 <body>
     
     <!-- 메뉴바 -->
-    <jsp:include page="../home.jsp" />
+    <jsp:include page="../main.jsp" />
 
     <div class="content">
         <br><br>
@@ -17,7 +17,7 @@
             <h2>회원가입</h2>
             <br>
 
-            <form action="userEnroll.me" method="post" id="userEnroll">
+            <form action="insert.me" method="post" id="userEnroll">
                 <div class="form-group">
                     <label for="userId">* ID : </label>
                     <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" required>
@@ -36,17 +36,17 @@
                     <input type="text" class="form-control" id="userBirth" placeholder="Please Enter Name" name="userName" required> <br>
 
 
-                    <label for="email"> &nbsp; Email : </label>
-                    <input type="text" class="form-control" id="email" placeholder="Please Enter Email" name="email"> <br>
+                    <label for="userEmail"> &nbsp; Email : </label>
+                    <input type="text" class="form-control" id="userEmail" placeholder="Please Enter Email" name="userEmail"> <br>
 
 <!--                     <label for="age"> &nbsp; Age : </label> -->
 <!--                     <input type="number" class="form-control" id="age" placeholder="Please Enter Age" name="age"> <br> -->
 
-                    <label for="phone"> &nbsp; Phone : </label>
-                    <input type="tel" class="form-control" id="phone" placeholder="Please Enter Phone (-없이)" name="phone"> <br>
+                    <label for="userPhone"> &nbsp; Phone : </label>
+                    <input type="tel" class="form-control" id="userPhone" placeholder="Please Enter Phone (-없이)" name="userPhone"> <br>
                     
-                    <label for="address"> &nbsp; Address : </label>
-                    <input type="text" class="form-control" id="address" placeholder="Please Enter Address" name="address"> <br>
+                    <label for="userAddress"> &nbsp; Address : </label>
+                    <input type="text" class="form-control" id="userAddress" placeholder="Please Enter Address" name="userAddress"> <br>
                     
 <!--                     <label for=""> &nbsp; Gender : </label> &nbsp;&nbsp; -->
 <!--                     <input type="radio" id="Male" value="M" name="gender" checked> -->
