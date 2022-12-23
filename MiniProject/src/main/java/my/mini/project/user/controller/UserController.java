@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import my.mini.project.user.model.service.UserService;
 import my.mini.project.user.model.vo.User;
@@ -29,29 +30,42 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	//회원가입
+	//회원가입 페이지
 	@RequestMapping("userEnroll.me")
 	public String userEnroll() {
 		
 		return "user/userEnrollPage";
 	}
 	
+	//회원가입
 	@RequestMapping("insert.me")
 	public String insertUser(User u,HttpSession session,Model model) {
 		
 		int result = userService.insertUser(u);
 		
 		if(result>0) {
-			
 			session.setAttribute("alertMsg", "회원가입이 완료되었습니다");
 			return "redirect:/";
-		
 		}else {
-			
 			model.addAttribute("errorMsg", "회원가입이 실패되었습니다");
 			return "redirect:/";
-			
+		}
+	}
+	
+	//로그인
+	@RequestMapping("loginuser.ui")
+	public ModelAndView loginUser(User u,HttpSession session,ModelAndView mv) {
+		
+		User loginUser = userService.loginUser(u);
+		
+		if(loginUser==null) {
+			mv.addObject("errorMsg", "로그인에 실패하였습니다");
+			mv.setViewName("redirect:/");
+		}else {
+			session.setAttribute("loginUser", loginUser);
+			mv.setViewName("redirect:/");
 		}
 		
+		return mv;
 	}
 }

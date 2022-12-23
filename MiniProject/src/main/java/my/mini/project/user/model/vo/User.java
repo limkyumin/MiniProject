@@ -30,7 +30,7 @@ public class User {
 	private String userId;			//	USER_ID	VARCHAR2(12 BYTE)	Yes		2	
 	private String userPwd;			//	USER_PWD	VARCHAR2(15 BYTE)	No		3	
 	private String userName;		//	USER_NAME	VARCHAR2(10 BYTE)	No		4	
-	private int userBirth;			//	USER_BIRTH	NUMBER(8,0)	No		5	
+	private String userBirth;			//	USER_BIRTH	NUMBER(8,0)	No		5	
 	private String userEmail;		//	USER_EMAIL	VARCHAR2(30 BYTE)	No		6	
 	private String userPhone;		//	USER_PHONE	VARCHAR2(13 BYTE)	No		7	
 	private String userAddress;		//	USER_ADDRESS	VARCHAR2(100 BYTE)	No		8	

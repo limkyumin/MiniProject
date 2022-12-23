@@ -107,7 +107,7 @@
             <ul>
                 <li><a href="./">HOME</a></li> <!-- "${request.getContextPath()}" -->
                 <li><a href="">공지사항</a></li>
-                <li><a href="list.bo">애완용품</a></li>
+                <li><a href="">애완용품</a></li>
                 <li><a href="">커뮤니티</a></li>
             </ul>
         </div>
@@ -123,7 +123,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
         
-                <form action="login.me" method="post">
+                <form action="loginuser.ui" method="post">
                     <!-- Modal body -->
                     <div class="modal-body">
                         <label for="userId" class="mr-sm-2">ID : </label>

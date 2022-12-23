@@ -24,5 +24,14 @@ public class UserServiceImpl implements UserService {
 		
 		return result;
 	}
+	
+	//로그인
+	@Override
+	public User loginUser(User u) {
+		
+		User loginUser = userDao.loginUser(sqlSession,u);
+		
+		return loginUser;
+	}
 
 }

@@ -33,7 +33,7 @@
                     <input type="text" class="form-control" id="userName" placeholder="Please Enter Name" name="userName" required> <br>
 
 					<label for="userBirth">* 생일 : </label>
-                    <input type="text" class="form-control" id="userBirth" placeholder="Please Enter Name" name="userName" required> <br>
+                    <input type="text" class="form-control" id="userBirth" placeholder="Please Enter Name" name="userBirth" required> <br>
 
 
                     <label for="userEmail"> &nbsp; Email : </label>

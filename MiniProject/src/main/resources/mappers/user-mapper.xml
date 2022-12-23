@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="USER_STATUS" property="userStatus"/>
 	</resultMap>
 
+	<!-- 회원가입 -->
 	<insert id="insertUser" parameterType="user">
 		INSERT INTO USER_INFO(
 							USER_NO,
@@ -45,8 +46,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 							)
 	
 	</insert>
-
-
+	
+	<!-- 로그인 -->
+	<select id="loginUser" resultMap="userResultSet">
+		SELECT USER_ID,
+			   USER_PWD,
+			   USER_NAME,
+			   USER_BIRTH,
+			   USER_EMAIL,
+			   USER_PHONE,
+			   USER_ADDRESS,
+			   ENROLL_DATE,
+			   STOP_DATE,
+			   WITHDRAWAL_DATE,
+			   FORCE_DATE,
+			   USER_STATUS
+		FROM USER_INFO
+		WHERE USER_ID = #{userId}
+		AND (USER_STATUS = 'Y' OR USER_STATUS = 'P')
+	</select>
 
 
 

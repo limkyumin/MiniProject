@@ -13,4 +13,11 @@ public class UserDao {
 		return sqlSession.insert("userMapper.insertUser",u);
 	}
 
+	public User loginUser(SqlSessionTemplate sqlSession, User u) {
+
+		return sqlSession.selectOne("userMapper.loginUser",u);
+	}
+
+
+
 }
