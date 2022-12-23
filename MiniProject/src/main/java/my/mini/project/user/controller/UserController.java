@@ -68,4 +68,20 @@ public class UserController {
 		
 		return mv;
 	}
+	
+	//로그아웃
+	@RequestMapping("logout.me")
+	public String logoutUser(HttpSession session) {
+		
+		session.removeAttribute("loginUser");
+		
+		return "redirect:/";
+	}
+	
+	//마이페이지
+	@RequestMapping("myPage.me")
+	public String myPage() {
+			
+		return "user/myPage";
+	}
 }

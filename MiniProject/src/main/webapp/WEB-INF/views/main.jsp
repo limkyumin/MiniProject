@@ -98,7 +98,7 @@
                 		<!-- 로그인 후 -->                 
 	                    <label>${ loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
 	                    <a href="myPage.me">마이페이지</a>
-	                    <a href="logout.me">로그아웃</a>
+	                    <a data-toggle="modal" data-target="#logoutModal">로그아웃</a>
                		</c:otherwise>
                 </c:choose>
             </div>
@@ -112,6 +112,9 @@
             </ul>
         </div>
     </div>
+
+
+
 
     <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
     <div class="modal fade" id="loginModal">
@@ -140,7 +143,25 @@
                 </form>
             </div>
         </div>
-
+    </div>
+    
+    	<!-- 로그아웃 모달 -->
+	<div class="modal fade" id="logoutModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Logout</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+ 
+                <div class="modal-body">정말 로그아웃 하시겠습니까?</div>
+                <div class="modal-footer">
+                	<a type="button" href="logout.me" class="btn btn-primary">확인<a>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+                </div>  
+            </div>
+        </div>
     </div>
     
     <br clear="both">
