@@ -33,5 +33,14 @@ public class UserServiceImpl implements UserService {
 		
 		return loginUser;
 	}
+	
+	//정보수정
+	@Override
+	public int updateUser(User u) {
+		
+		int loginUser = userDao.updateUser(sqlSession, u);
+		
+		return 0;
+	}
 
 }

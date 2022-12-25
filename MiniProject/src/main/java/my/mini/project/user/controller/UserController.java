@@ -58,11 +58,11 @@ public class UserController {
 		
 		User loginUser = userService.loginUser(u);
 		
-		if(loginUser==null) {
-			mv.addObject("errorMsg", "로그인에 실패하였습니다");
-			mv.setViewName("redirect:/");
-		}else {
+		if(loginUser!=null) {
 			session.setAttribute("loginUser", loginUser);
+			mv.setViewName("redirect:/");			
+		}else {
+			mv.addObject("alertMsg", "로그인에 실패하였습니다");
 			mv.setViewName("redirect:/");
 		}
 		
@@ -78,10 +78,31 @@ public class UserController {
 		return "redirect:/";
 	}
 	
-	//마이페이지
+	//마이페이지 ui
 	@RequestMapping("myPage.me")
 	public String myPage() {
 			
 		return "user/myPage";
+	}
+	
+	//마이페이지
+	@RequestMapping("update.me")
+	public String updateUser(User u,HttpSession session, Model model) {
+		
+		int result = userService.updateUser(u);
+		
+		if(result>0) {
+			User updateUser = userService.loginUser(u);
+			session.setAttribute("loginUser", updateUser);
+			session.setAttribute("alertMsg", "회원정보 수정완료");
+			return "redirect:/";
+		}else {
+			model.addAttribute("errorMsg", "회원정보 수정실패");
+			
+			return "redirect:myPage.me";
+		}
+		
+		
+		
 	}
 }

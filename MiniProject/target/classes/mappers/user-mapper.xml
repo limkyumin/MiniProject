@@ -49,7 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 로그인 -->
 	<select id="loginUser" resultMap="userResultSet">
-		SELECT USER_ID,
+		SELECT USER_NO,
+			   USER_ID,
 			   USER_PWD,
 			   USER_NAME,
 			   USER_BIRTH,
@@ -66,8 +67,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		AND (USER_STATUS = 'Y' OR USER_STATUS = 'P')
 	</select>
 
-
-
+	<!-- 회원 정보수정하기 -->
+	<update id="updateUser" parameterType="User">
+		UPDATE USER_INFO
+		SET USER_PWD = #{userPwd},
+			USER_EMAIL = #{userEmail},
+			USER_BIRTH = #{userBirth},
+			USER_PHONE = #{userPhone},
+			USER_ADDRESS = #{userAddress},
+			MODIFY_DATE = SYSDATE
+		WHERE USER_ID = #{userId}
+	</update>
 
 
 

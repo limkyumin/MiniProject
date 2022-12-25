@@ -9,5 +9,8 @@ public interface UserService {
 
 	//로그인
 	User loginUser(User u);
+	
+	//정보수정
+	int updateUser(User u);
 
 }
