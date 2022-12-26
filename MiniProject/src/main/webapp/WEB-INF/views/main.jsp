@@ -74,13 +74,13 @@
     </style>
 </head>
 <body>
+	<!-- 얼랏 alert 스크립트임 -->
 	<c:if test="${not empty alertMsg}">
 		<script>
-			alertify.alert("서비스 요청 성공","${alertMsg}");
+			alertify.alert("","${alertMsg}");
 		</script>
 		<c:remove var="alertMsg" scope="session"/>
 	</c:if>
-
     <div id="header">
         <div id="header_1">
             <div id="header_1_left">

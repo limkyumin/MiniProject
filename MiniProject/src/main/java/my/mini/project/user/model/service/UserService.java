@@ -12,5 +12,8 @@ public interface UserService {
 	
 	//정보수정
 	int updateUser(User u);
+	
+	//회원탈퇴
+	int deleteUser(String userId);
 
 }

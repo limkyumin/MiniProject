@@ -42,5 +42,14 @@ public class UserServiceImpl implements UserService {
 		
 		return 0;
 	}
+	
+	//회원탈퇴
+	@Override
+	public int deleteUser(String userId) {
+		
+		int result = userDao.deleteUser(sqlSession,userId);
+		
+		return result;
+	}
 
 }

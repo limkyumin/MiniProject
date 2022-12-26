@@ -21,8 +21,7 @@
                 <div class="form-group">
                     <label for="userId">* ID : </label>
                     <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" required>
-<!-- 					<button type="button" onclick="idchk();">중복체크</button>  -->
-<!-- 					<div id="idcheck"></div> -->
+					
                     <label for="userPwd">* Password : </label>
                     <input type="password" class="form-control" id="userPwd" placeholder="Please Enter Password" name="userPwd" required> <br>
 
@@ -127,8 +126,6 @@
 
     </div>
 
-    <!-- 푸터바 -->
-  <!--   <jsp:include page="../common/footer.jsp" />  -->
-
+   
 </body>
 </html>

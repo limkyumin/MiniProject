@@ -62,7 +62,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 ​
-                <form action="delete.me" method="post">
+                <form action="delete.ui" method="post">
                     <!-- Modal body -->
                     <div class="modal-body">
                         <div align="center">
@@ -82,5 +82,5 @@
         </div>
     </div>
 ​
-   <!--   <jsp:include page="../common/footer.jsp" /> -->
+   
 </html>

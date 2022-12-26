@@ -3,6 +3,7 @@ package my.mini.project.user.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,9 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;
+	
 	//회원가입 페이지
 	@RequestMapping("userEnroll.me")
 	public String userEnroll() {
@@ -41,6 +45,10 @@ public class UserController {
 	@RequestMapping("insert.me")
 	public String insertUser(User u,HttpSession session,Model model) {
 		
+		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
+		
+		u.setUserPwd(encPwd);
+		//암호화 된 pwd를 User u에 담아주기(평문과 바꿔치기)
 		int result = userService.insertUser(u);
 		
 		if(result>0) {
@@ -58,11 +66,13 @@ public class UserController {
 		
 		User loginUser = userService.loginUser(u);
 		
-		if(loginUser!=null) {
-			session.setAttribute("loginUser", loginUser);
-			mv.setViewName("redirect:/");			
+		if(loginUser!=null && bcryptPasswordEncoder.matches(u.getUserPwd(), loginUser.getUserPwd())) {
+			session.setAttribute("alertMsg", loginUser.getUserName()+"님 안녕하세요!");
+			session.setAttribute("loginUser", loginUser);				
+			mv.setViewName("redirect:/");	
+
 		}else {
-			mv.addObject("alertMsg", "로그인에 실패하였습니다");
+			session.setAttribute("alertMsg", "아이디와 비밀번호를 확인해주세요");
 			mv.setViewName("redirect:/");
 		}
 		
@@ -100,9 +110,40 @@ public class UserController {
 			model.addAttribute("errorMsg", "회원정보 수정실패");
 			
 			return "redirect:myPage.me";
+		}	
+	}
+	
+	//회원탈퇴
+	@RequestMapping("delete.ui")
+	public String deleteUser(String userPwd,HttpSession session, Model model) {
+		
+		String userId = ((User)session.getAttribute("loginUser")).getUserId();
+		String encPwd = ((User)session.getAttribute("loginUser")).getUserPwd();
+		
+		if(bcryptPasswordEncoder.matches(userPwd, encPwd)) {
+			//비번 일치할 경우 ㅡ 탈퇴처리
+			
+			int result = userService.deleteUser(userId);
+			
+			if(result>0) {
+				
+				session.removeAttribute("loginUser");
+				
+				session.setAttribute("alertMsg", "회원 탈퇴성공");
+				
+				return "redirect:/";
+			}else {
+				//탈퇴실패
+				model.addAttribute("alertMsg", "탈퇴 실패");
+			
+				return "redirect:/";
+			}
+		}else {
+			
+			session.setAttribute("alertMsg", "비밀번호를 잘못입력하셨습니다 ");
+			
+			return "redirect:/myPage.me";
 		}
-		
-		
 		
 	}
 }

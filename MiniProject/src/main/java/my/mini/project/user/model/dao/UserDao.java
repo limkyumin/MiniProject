@@ -25,6 +25,12 @@ public class UserDao {
 		
 		return sqlSession.update("userMapper.updateUser",u);
 	}
+	
+	//회원탈퇴
+	public int deleteUser(SqlSessionTemplate sqlSession, String userId) {
+		
+		return sqlSession.delete("userMapper.deleteUser",userId);
+	}
 
 
 
