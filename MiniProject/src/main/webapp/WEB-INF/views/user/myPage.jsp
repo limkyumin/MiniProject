@@ -23,7 +23,7 @@
                     <input type="text" class="form-control" id="userName" value="${loginUser.userName}" name="userName" readonly> <br>
 ​					
 					<label for="userPwd">* Password : </label>
-                    <input type="password" class="form-control" id="userPwd" value="${loginUser.userPwd}" name="userPwd" required> <br>
+                    <input type="password" class="form-control" id="userPwd" value="" name="userPwd" required> <br>
 
                     <label for="checkPwd">* Password Check : </label>
                     <input type="password" class="form-control" id="checkPwd" required> <br>

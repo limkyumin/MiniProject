@@ -4,8 +4,11 @@ import my.mini.project.user.model.vo.User;
 
 public interface UserService {
 	
-	//회원가입 (insert)
+	//회원가입
 	int insertUser(User u);
+	
+	//아이디 중복체크
+	int idCheck(String checkId);
 
 	//로그인
 	User loginUser(User u);
@@ -15,5 +18,6 @@ public interface UserService {
 	
 	//회원탈퇴
 	int deleteUser(String userId);
+
 
 }

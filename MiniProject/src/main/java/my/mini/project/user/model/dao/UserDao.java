@@ -14,6 +14,12 @@ public class UserDao {
 		return sqlSession.insert("userMapper.insertUser",u);
 	}
 	
+	//아이디 중복체크
+	public int idCheck(SqlSessionTemplate sqlSession, String userId) {
+		
+		return sqlSession.selectOne("userMapper.idCheck",userId);
+	}
+	
 	//로그인
 	public User loginUser(SqlSessionTemplate sqlSession, User u) {
 
@@ -31,6 +37,7 @@ public class UserDao {
 		
 		return sqlSession.delete("userMapper.deleteUser",userId);
 	}
+
 
 
 

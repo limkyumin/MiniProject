@@ -1,5 +1,8 @@
 package my.mini.project.user.controller;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import my.mini.project.user.model.service.UserService;
@@ -60,6 +64,20 @@ public class UserController {
 		}
 	}
 	
+	//회원가입 - 아이디 중복체크
+	@RequestMapping(value="idCheck.ui", produces="text/html; charset=UTF-8")
+	@ResponseBody
+	public void idCheck(Model model, HttpServletResponse response, String checkId) throws IOException {
+		
+		int count = userService.idCheck(checkId);
+		
+		if(count>0) {
+			response.getWriter().print("NNNNN");
+		}else {
+			response.getWriter().print("NNNNY");
+		}
+	}
+	
 	//로그인
 	@RequestMapping("loginuser.ui")
 	public ModelAndView loginUser(User u,HttpSession session,ModelAndView mv) {
@@ -95,9 +113,12 @@ public class UserController {
 		return "user/myPage";
 	}
 	
-	//마이페이지
+	//마이페이지 -> 회원정보수정
 	@RequestMapping("update.me")
 	public String updateUser(User u,HttpSession session, Model model) {
+		
+		String encPwd = bcryptPasswordEncoder.encode(u.getUserPwd());
+		u.setUserPwd(encPwd);
 		
 		int result = userService.updateUser(u);
 		
@@ -144,6 +165,5 @@ public class UserController {
 			
 			return "redirect:/myPage.me";
 		}
-		
 	}
 }

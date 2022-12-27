@@ -16,13 +16,20 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
-	//회원가입(insert)
+	//회원가입
 	@Override
 	public int insertUser(User u) {
 		
 		int result = userDao.insertUser(sqlSession,u);
 		
 		return result;
+	}
+	
+	//아이디 중복체크
+	@Override
+	public int idCheck(String userId) {
+		
+		return userDao.idCheck(sqlSession,userId);
 	}
 	
 	//로그인
@@ -51,5 +58,7 @@ public class UserServiceImpl implements UserService {
 		
 		return result;
 	}
+
+
 
 }
