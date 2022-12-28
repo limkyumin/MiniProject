@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
- <jsp:include page="../main.jsp" />
+ <jsp:include page="../common/header.jsp" />
 ​
     <div class="content">
         <br><br>
@@ -16,29 +16,36 @@
 ​
             <form action="update.me" method="post">
                 <div class="form-group">
-                    <label for="userId">* ID : </label>
+                    <label for="userId">* 아이디 : </label>
                     <input type="text" class="form-control" id="userId" value="${loginUser.userId}" name="userId" readonly> <br>
-​
-                    <label for="userName">* Name : </label>
-                    <input type="text" class="form-control" id="userName" value="${loginUser.userName}" name="userName" readonly> <br>
+​					<!-- 아이디는 readonly 수정불가능. -->
+
+                    <label for="userName">* 이름 : </label>
+                    <input type="text" class="form-control" id="userName" value="${loginUser.userName}" name="userName"> <br>
 ​					
-					<label for="userPwd">* Password : </label>
+					<label for="userPwd">* 비밀번호 : </label>
                     <input type="password" class="form-control" id="userPwd" value="" name="userPwd" required> <br>
 
-                    <label for="checkPwd">* Password Check : </label>
+                    <label for="checkPwd">* 비밀번호 재확인 : </label>
                     <input type="password" class="form-control" id="checkPwd" required> <br>
 											
-                    <label for="userEmail"> &nbsp; Email : </label>
-                    <input type="text" class="form-control" id="userEmail" value="${loginUser.userEmail}" name="userEmail"> <br>
 ​
-                    <label for="userBirth"> &nbsp; 생년월일 : </label>
+                    <label for="userBirth">* 생년월일 : </label>
                     <input type="number" class="form-control" id="userBirth" value="${loginUser.userBirth}" name="userBirth" readonly> <br>
-​
-                    <label for="userPhone"> &nbsp; Phone : </label>
+​					<!-- 생년월일은 readonly 수정불가능. -->
+
+                    <label for="userEmail">* 이메일 : </label>
+                    <input type="text" class="form-control" id="userEmail" value="${loginUser.userEmail}" name="userEmail"> <br>
+
+                    <label for="userPhone">* 핸드폰 번호 : </label>
                     <input type="tel" class="form-control" id="userPhone" value="${loginUser.userPhone}" name="userPhone"> <br>
                     
-                    <label for="userAddress"> &nbsp; Address : </label>
+                    <label for="userAddress">* 주소 : </label>
                     <input type="text" class="form-control" id="userAddress" value="${loginUser.userAddress}" name="userAddress"> <br>
+                    
+                    <label for="userAddressDetail">* 상세주소 </label>
+					<input type="text" class="form-control" id="userAddressDetail" value="${loginUser.userAddressdetail }" name="userAddressDetail">
+				<br>
                 </div> 
                 <br>
                 <div class="btns" align="center">

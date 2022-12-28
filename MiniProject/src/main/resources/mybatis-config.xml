@@ -9,6 +9,8 @@
 	<typeAliases>
 	<!--  	<typeAlias type="my.mini.project" alias="board"/> -->
 		<typeAlias type="my.mini.project.user.model.vo.User" alias="user"/>
+		<typeAlias type="my.mini.project.notice.model.vo.Notice" alias="notice"/>
+		
 	</typeAliases>
 	
 	<!-- 
@@ -21,6 +23,7 @@
 	 
 	<mappers>
 		<mapper resource="/mappers/user-mapper.xml"/>
+		<mapper resource="/mappers/notice-mapper.xml"/>
 	<!-- 	<mapper resource="/mappers/member-mapper.xml"/>	
 		<mapper resource="/mappers/board-mapper.xml"/>  -->
 	</mappers>

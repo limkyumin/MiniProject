@@ -34,6 +34,7 @@ public class User {
 	private String userEmail;		//	USER_EMAIL	VARCHAR2(30 BYTE)	No		6	
 	private String userPhone;		//	USER_PHONE	VARCHAR2(13 BYTE)	No		7	
 	private String userAddress;		//	USER_ADDRESS	VARCHAR2(100 BYTE)	No		8	
+	private String userAddressdetail;
 	private Date enrollDate; 		//	ENROLL_DATE	DATE	No	SYSDATE 	9	
 	private Date modifyDate;		//	MODIFY_DATE	DATE	No	SYSDATE 	10	
 	private Date stopDate;			//	STOP_DATE	DATE	No	SYSDATE 	11	
