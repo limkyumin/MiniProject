@@ -107,7 +107,7 @@
             <ul>
                 <li><a href="./">HOME</a></li> <!-- "${request.getContextPath()}" -->
                 <li><a href="noticeMain.ui">공지사항</a></li>
-                <li><a href="">애완용품</a></li>
+                <li><a href="productMain.ui">애완용품</a></li>
                 <li><a href="">커뮤니티</a></li>
             </ul>
         </div>
