@@ -26,4 +26,24 @@ public class ProductDao {
 		return sqlSession.selectOne("productMapper.selectListCount");
 	}
 
+	public int productInsert(SqlSessionTemplate sqlSession, Product p) {
+		
+		return sqlSession.insert("productMapper.productInsert", p);
+	}
+
+	public Product productDetail(SqlSessionTemplate sqlSession, int productNo) {
+		
+		return sqlSession.selectOne("productMapper.productDetail", productNo);
+	}
+
+	public int update(SqlSessionTemplate sqlSession, Product p) {
+		
+		return sqlSession.update("productMapper.update", p);
+	}
+
+	public int productDelete(SqlSessionTemplate sqlSession, int productNo) {
+		
+		return sqlSession.update("productMapper.productDelete", productNo);
+	}
+
 }

@@ -12,6 +12,14 @@ public interface ProductService {
 	
 	ArrayList<Product> selectAll(PageInfo pi);
 
+	int productInsert(Product p);
+
+	Product productDetail(int pno);
+
+	int update(Product p);
+
+	int productDelete(int productNo);
+
 	
 
 	
