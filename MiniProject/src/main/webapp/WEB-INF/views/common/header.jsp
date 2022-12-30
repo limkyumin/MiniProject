@@ -4,12 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <!-- jQuery 라이브러리 -->
+<meta charset="UTF-8">
+<title>header 영역</title>
+	<!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
     <!-- 부트스트랩에서 제공하고 있는 스타일 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
     <!-- 부트스트랩에서 제공하고 있는 스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
@@ -18,153 +20,114 @@
 	
 	<!-- CSS -->
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+	
 	<!-- Default theme -->
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+	
 	<!-- Semantic UI theme -->
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
-	    
-    
-    <style>
-        div {box-sizing:border-box;}
-        #header {
-            width:80%;
-            height:100px;
-            padding-top:20px;
-            margin:auto;
-        }
-        #header>div {width:100%; margin-bottom:10px;}
-        #header_1 {height:40%;}
-        #header_2 {height:60%;}
+	
+		<!-- Favicons -->
+  <link href="./resources/img/favicon.png" rel="icon">
+  <link href="./resources/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-        #header_1>div{
-            height:100%;
-            float:left;
-        }
-        #header_1_left {width:30%; position:relative;}
-        #header_1_center {width:40%;}
-        #header_1_right {width:30%;}
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-        #header_1_left>img {height:80%; position:absolute; margin:auto; top:0px; bottom:0px; right:0px; left:0px;}
-        #header_1_right {text-align:center; line-height:35px; font-size:12px; text-indent:35px;}
-        #header_1_right>a {margin:5px;}
-        #header_1_right>a:hover {cursor:pointer;}
+  <!-- Vendor CSS Files -->
+  <link href="./resources/vendor/animate.css/animate.min.css" rel="stylesheet" type="text/css">
+  <link href="./resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="./resources/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" type="text/css">
+  <link href="./resources/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" type="text/css">
+  <link href="./resources/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" type="text/css">
+  <link href="./resources/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css">
 
-        #header_2>ul {width:100%; height:100%; list-style-type:none; margin:auto; padding:0;}
-        #header_2>ul>li {float:left; width:25%; height:100%; line-height:55px; text-align:center;}
-        #header_2>ul>li a {text-decoration:none; color:black; font-size:18px; font-weight:900;}
-
-        #header_2 {border-top:1px solid lightgray;}
-
-        #header a {text-decoration:none; color:black;}
-
-        /* 세부페이지마다 공통적으로 유지할 style */
-        .content {
-            background-color:rgb(247, 245, 245);
-            width:80%;
-            margin:auto;
-        }
-        .innerOuter {
-            border:1px solid lightgray;
-            width:80%;
-            margin:auto;
-            padding:5% 10%;
-            background-color:white;
-        }
-
-    </style>
+  <!-- Template Main CSS File -->
+  <link href="./resources/css/style.css" rel="stylesheet" type="text/css">
+	
+	
+	
 </head>
 <body>
-	<!-- 얼랏 alert 스크립트임 -->
+
+<!-- 얼랏 alert 스크립트임 -->
 	<c:if test="${not empty alertMsg}">
 		<script>
 			alertify.alert("","${alertMsg}");
 		</script>
 		<c:remove var="alertMsg" scope="session"/>
 	</c:if>
-    <div id="header">
-        <div id="header_1">
-            <div id="header_1_left">
-                <img src="https://img.freepik.com/premium-photo/ragdoll-cat-portrait_156881-7090.jpg" alt="">
-            </div>
-            <div id="header_1_center"></div>
-            <div id="header_1_right">
-          		<c:choose>
-          			<c:when test="${ empty loginUser }">
-               			<!-- 로그인 전 -->
-		                <a href="userEnroll.me">회원가입</a>
-		                <a data-toggle="modal" data-target="#loginModal">로그인</a> <!-- 모달의 원리 : 이 버튼 클릭시 data-target에 제시되어있는 해당 아이디의 div요소를 띄워줌 -->
-                	</c:when>
-       				<c:otherwise>
-                		<!-- 로그인 후 -->                 
-	                    <label>${ loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
-	                    <a href="myPage.me">마이페이지</a>
-	                    <a data-toggle="modal" data-target="#logoutModal">로그아웃</a>
-               		</c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-        <div id="header_2">
+
+
+	  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="./">규민PJ</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="./">Home</a></li>
+          <li><a class="nav-link scrollto" href="noticeMain.ui">NOTICE</a></li>
+          <li><a class="nav-link scrollto" href="productMain.ui">SHOP</a></li>
+          
+          
+          <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-                <li><a href="./">HOME</a></li> <!-- "${request.getContextPath()}" -->
-                <li><a href="noticeMain.ui">공지사항</a></li>
-                <li><a href="productMain.ui">애완용품</a></li>
-                <li><a href="">커뮤니티</a></li>
+              <li><a href="#">Drop Down 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="#">Deep Drop Down 1</a></li>
+                  <li><a href="#">Deep Drop Down 2</a></li>
+                  <li><a href="#">Deep Drop Down 3</a></li>
+                  <li><a href="#">Deep Drop Down 4</a></li>
+                  <li><a href="#">Deep Drop Down 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li>
             </ul>
-        </div>
-    </div>
-
-
-
-
-    <!-- 로그인 클릭 시 뜨는 모달 (기존에는 안보이다가 위의 a 클릭 시 보임) -->
-    <div class="modal fade" id="loginModal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Login</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
+          </li> 
+          <c:choose>
+          	
+          	<c:when test="${ empty loginUser }">
+          		
+          		<li><a class="getstarted scrollto" href="loginPage.ui">로그인/회원가입</a></li>
+       	 	</c:when>
+       	 	<c:otherwise>
+              	              
+	             <label>${ loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
+	             <a href="myPage.me">마이페이지</a>
+	             <a href="logout.me">로그아웃</a>
+            </c:otherwise>
+       	  </c:choose> 
+        </ul>
+         
+<!-- <li><a class="nav-link scrollto" href="loginPage.ui">로그인</a></li> -->
         
-                <form action="loginuser.ui" method="post">
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <label for="userId" class="mr-sm-2">ID : </label>
-                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
-                        <label for="userPwd" class="mr-sm-2">Password : </label>
-                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd">
-                    </div>
-                           
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">로그인</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+   
+        
+        
+        
+        
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
     </div>
-    
-    	<!-- 로그아웃 모달 -->
-	<div class="modal fade" id="logoutModal">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Logout</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
- 
-                <div class="modal-body">정말 로그아웃 하시겠습니까?</div>
-                <div class="modal-footer">
-                	<a type="button" href="logout.me" class="btn btn-primary">확인<a>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-                </div>  
-            </div>
-        </div>
-    </div>
-    
-    <br clear="both">
+  </header><!-- End Header -->
+  
+    <script src="./resources/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="./resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="./resources/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="./resources/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="./resources/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="./resources/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="./resources/js/main.js"></script>
+  
+  
 </body>
-</html>
 </html>

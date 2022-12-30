@@ -6,7 +6,7 @@
 <head>
 <link rel="icon" type="image/png" href="./resources/images/zip3.png">
 <meta charset="UTF-8">
-<title>Z.I.P | 공지사항</title>
+<title>공지사항</title>
 
 <jsp:include page="../common/header.jsp" />
 <!-- 부트스트랩에서 제공하고 있는 스타일 -->

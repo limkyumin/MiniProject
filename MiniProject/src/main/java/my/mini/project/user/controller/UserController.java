@@ -78,6 +78,14 @@ public class UserController {
 		}
 	}
 	
+	//로그인 홈페이지 이동
+	@RequestMapping("loginPage.ui")
+	public String loginPage() {
+		
+		return "user/loginPage";
+	}
+	
+	
 	//로그인
 	@RequestMapping("loginuser.ui")
 	public ModelAndView loginUser(User u,HttpSession session,ModelAndView mv) {
@@ -91,7 +99,7 @@ public class UserController {
 
 		}else {
 			session.setAttribute("alertMsg", "아이디와 비밀번호를 확인해주세요");
-			mv.setViewName("redirect:/");
+			mv.setViewName("user/login");
 		}
 		
 		return mv;
