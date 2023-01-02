@@ -49,7 +49,7 @@
                 <h2 class="animate__animated animate__fadeInDown">저희 홈페이지에 방문하신것을 환영합니다</h2>
                 <p class="animate__animated animate__fadeInUp">공지사항 확인</p>
                 <div>
-                  <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">READ NOTICE</a>
+                  <a href="noticeMain.ui" class="btn-get-started animate__animated animate__fadeInUp scrollto">READ NOTICE</a>
                 </div>
               </div>
             </div>
@@ -62,7 +62,7 @@
                 <h2 class="animate__animated animate__fadeInDown">애완용품 SHOP</h2>
                 <p class="animate__animated animate__fadeInUp">최상의 애완용품만 취급합니다.</p>
                 <div>
-                  <a href="#about" class="btn-get-started animate__animated animate__fadeInUp scrollto">READ SHOP</a>
+                  <a href="productMain.ui" class="btn-get-started animate__animated animate__fadeInUp scrollto">READ SHOP</a>
                 </div>
               </div>
             </div>

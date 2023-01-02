@@ -71,7 +71,7 @@
           <li><a class="nav-link scrollto active" href="./">Home</a></li>
           <li><a class="nav-link scrollto" href="noticeMain.ui">NOTICE</a></li>
           <li><a class="nav-link scrollto" href="productMain.ui">SHOP</a></li>
-          
+          <li><a class="nav-link scrollto" href="productMain.ui">Petsitter</a></li>
           
           <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
             <ul>

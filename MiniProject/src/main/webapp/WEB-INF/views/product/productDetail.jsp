@@ -24,6 +24,11 @@
 
 <!-- 카카오페이 -->
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+<!-- 아임포트 -->
+ <!-- iamport.payment.js -->
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+
 <style>
 	.content {
 		width: 90%;
@@ -107,7 +112,7 @@
 			</c:if>
 			
 			<c:if test="${loginUser.userId ne p.userId }">
-				<a class="btn btn-danger" onclick="productSell();" id=kakao>구매</a>
+				<a class="btn btn-danger" id="buy">구매</a>
 			</c:if>
 			
 			
@@ -126,25 +131,56 @@
 			$("#postform").attr("action", "productSell.ui").submit();
 		}
 		
+		
 		</script>
 		
-		<script>
-			$(function(){
-				$('#kakao').click(function(){
-					$.ajax({
-						url:
-						dataType:'json',
-						success:function(data){
-							alert(data.tid);
-						} ,
-						error:function(error){
-							alert(error);
-						}
-					})
-				})
-			})
+		<!-- 아임포트 -->
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#buy").click(function(){
+					payment();
+				});
+			});
+				
 			
-			</script>
+			function payment(data) {
+				IMP.init('imp18673883');
+				IMP.request_pay({
+					pg: "kakaopay.TC0ONETIME", //pg사명 or pg사명.CID (잘못 입력할 경우, 기본 PG사가 띄워짐)
+			        pay_method: "card", //지불 방법
+			        merchant_uid:  'merchant_' + new Date().getTime(), //가맹점 주문번호 (아임포트를 사용하는 가맹점에서 중복되지 않은 임의의 문자열을 입력)
+			        name: ${p.productName }, //결제창에 노출될 상품명
+			        amount: ${p.productPrice }, //금액
+			        buyer_email : "testiamport@naver.com", 
+			        buyer_name : "홍길동",
+			        buyer_tel : "01012341234"
+				}, function(rsp) {
+					if(rsp.success){
+						var msg = '결제가 완료되었습니다.';
+						msg += '고유ID : ' + rsp.imp_uid;
+						msg += '상점 거래ID : ' + rsp.merchant_uid;
+						msg += '결제 금액 : ' + rsp.paid_amount;
+						msg += '카드 승인번호 : ' + rsp.apply_num;
+					}else{
+						var msg = '결제에 실패하였습니다.';
+						msg += '에러내용 : ' + rsp.error_msg;
+					}
+				});
+			}
+	
+			
+			
+	
+		</script>
+		
+		
+		
+		
+		<!-- 카카오 -->
+<!-- 		<script> -->
+
+			
+<!-- 			</script> -->
 		<br><br>
 	</div>
 
