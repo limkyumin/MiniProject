@@ -22,7 +22,7 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- 카카오페이 -->
+<!-- 아임포트 -->
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
 <!-- 아임포트 -->
@@ -53,7 +53,13 @@
 
 </head>
 <body>
-
+<!-- 얼랏 alert 스크립트임 -->
+	<c:if test="${not empty alertMsg}">
+		<script>
+			alertify.alert("","${alertMsg}");
+		</script>
+		<c:remove var="alertMsg" scope="session"/>
+	</c:if>
 	
 	<div class="content">
 		<br><br>
@@ -115,7 +121,11 @@
 				<a class="btn btn-danger" id="buy">구매</a>
 			</c:if>
 			
-			
+			<a class="btn btn-danger" onclick="productSell();">
+    			카카오페이</a>
+    			
+    		<a class="btn btn-danger" onclick="productKakao();" id="#kakao">
+    			카페</a>
 			
 		</div>
 		<script>
@@ -128,9 +138,12 @@
 		}
 		
 		function productSell(){
-			$("#postform").attr("action", "productSell.ui").submit();
+			$("#postform").attr("action", "kakaoPay.ui").submit();
 		}
 		
+		function productKakao(){
+			$("#postform").attr("action", "kakao.ui").submit();
+		}
 		
 		</script>
 		
@@ -156,31 +169,41 @@
 			        buyer_tel : "01012341234"
 				}, function(rsp) {
 					if(rsp.success){
-						var msg = '결제가 완료되었습니다.';
-						msg += '고유ID : ' + rsp.imp_uid;
-						msg += '상점 거래ID : ' + rsp.merchant_uid;
-						msg += '결제 금액 : ' + rsp.paid_amount;
-						msg += '카드 승인번호 : ' + rsp.apply_num;
+						alert('결제 성공');
+						console.log('성공');
 					}else{
-						var msg = '결제에 실패하였습니다.';
-						msg += '에러내용 : ' + rsp.error_msg;
+						alert('실패');
+						console.log('실패');
 					}
 				});
 			}
-	
+		</script>
+		
+		<script>
+		<!-- 카카오 -->
+		$(function(){
+			$('#kakao').click(function(){
+				$.ajax({
+					url:"kakao.ui" ,
+					dataType: 'json' ,
+					success:function(data){
+						var box = data.next_redirect_pc_url;
+						console.log('성공임?');
+						window.open(box);
+						console.log('성공임?');
+					},
+					error:function(error){
+						alert(error);
+					}
+				});
+			});
+		});
 			
-			
-	
 		</script>
 		
 		
 		
-		
-		<!-- 카카오 -->
-<!-- 		<script> -->
 
-			
-<!-- 			</script> -->
 		<br><br>
 	</div>
 

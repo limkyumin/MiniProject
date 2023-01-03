@@ -142,57 +142,56 @@ public class ProductController {
 	}
 	
 	//상품구매
-	@RequestMapping("productSell.ui")
-//	@ResponseBody
+	@RequestMapping("kakao.ui")
+	@ResponseBody
 	public String productSell() {
-//		
-//		try {
-//			
-//			URL kakao = new URL("https://kapi.kakao.com/v1/payment/ready");
-//			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
-//			hrc.setRequestMethod("POST");
-//			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21");
-//			//	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
-//			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-//			hrc.setDoOutput(true);
-//			String kakaoParameter = "cid=TC0ONETIME&partner_order_id=partner_order_id&"
-//					+ "partner_user_id=partner_user_id&"
-//					+ "item_name=초코파이&quantity=1&total_amount=2200&"
-//					+ "vat_amount=200&tax_free_amount=0&"
-//					+ "approval_url=http://localhost:8989/project/productSell.ui&"
-//					+ "fail_url=http://localhost:8989/fail&"
-//					+ "cancel_url=http://localhost:8989/cancel";
-//			
-//			
-//			//cid=TC0ONETIME&partner_order_id=partner_order_id&partner_user_id=partner_user_id&item_name=초코파이&quantity=1&total_amount=2200&vat_amount=200&tax_free_amount=0&approval_url=http://localhost:8989/project/productSell.ui&fail_url=http://localhost:8989/fail&cancel_url=http://localhost:8989/cancel";
-//			OutputStream give = hrc.getOutputStream(); //주는애
-//			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
-//			giveData.writeBytes(kakaoParameter);
-//			giveData.close();
-//			
-//			int result = hrc.getResponseCode();
-//			
-//			InputStream receive; //받는애
-//			
-//			if(result == 200) { //200이 성공했을때임.
-//				receive = hrc.getInputStream();
-//			}else {
-//				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
-//			}
-//			
-//			InputStreamReader reader = new InputStreamReader(receive); //읽다
-//			BufferedReader change = new BufferedReader(reader); //형변환하는애
-//			System.out.println("넘어오나요?");
-//			return change.readLine();
-//			
-//		} catch (MalformedURLException e) {
-//
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//
-//			e.printStackTrace();
-//		}
-		return "product/productSell";
+		
+		try {
+			
+			URL kakao = new URL("https://kapi.kakao.com/v1/payment/ready");
+			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
+			hrc.setRequestMethod("POST");
+			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21");
+			//	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
+			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+			hrc.setDoOutput(true);
+			String kakaoParameter = "cid=TC0ONETIME&partner_order_id=partner_order_id&"
+					+ "partner_user_id=partner_user_id&"
+					+ "item_name=초코파이&quantity=1&total_amount=2200&"
+					+ "vat_amount=200&tax_free_amount=0&"
+					+ "approval_url=http://localhost:8989/project/productSell.ui&"
+					+ "fail_url=http://localhost:8989/fail&"
+					+ "cancel_url=http://localhost:8989/cancel";
+			
+			OutputStream give = hrc.getOutputStream(); //주는애
+			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
+			giveData.writeBytes(kakaoParameter);
+			giveData.close();
+			
+			int result = hrc.getResponseCode();
+			
+			InputStream receive; //받는애
+			
+			if(result == 200) { //200이 성공했을때임.
+				receive = hrc.getInputStream();
+			}else {
+				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
+			}
+			
+			InputStreamReader reader = new InputStreamReader(receive); //읽다
+			BufferedReader change = new BufferedReader(reader); //형변환하는애
+			System.out.println(reader+"카카오톡 페이 넘어와요??");
+			return change.readLine();
+			
+		} catch (MalformedURLException e) {
+
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		System.out.println("카카오톡 페이 넘어와요? 마지막 시스아웃");
+		return "product/ProductMain";
 	}
 	
 	
