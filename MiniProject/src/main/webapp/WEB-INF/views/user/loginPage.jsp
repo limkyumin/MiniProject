@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" type="image/png" href="./resources/images/zip3.png">
 <meta charset="UTF-8">
 <title>로그인/회원가입</title>
 <link rel="stylesheet" href="./resources/css/loginandnewuser.css">

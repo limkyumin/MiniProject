@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" type="image/png" href="./resources/images/zip3.png">
 <meta charset="UTF-8">
 <title>상품 판매 메인</title>
 

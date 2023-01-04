@@ -19,49 +19,34 @@ import my.mini.project.kakao.model.service.KakaoPay;
 @Log
 @Controller
 public class SampleController {
-	
-		@Autowired
-		private KakaoPay kakaopay;
-		
-//		@RequestMapping("kakaoPay.ui", method = RequestMethod.GET)
-//		public String kakaoPay(HttpServletRequest request, HttpSession session) throws Exception{
-//			
-//			System.out.println("1111111");
-//			
-//			return "redirect:" + kakaopay.KakaoPayReady();
-//		}
-//		
-//		@RequestMapping("kakaoPay.ui")
-//		public String kakaoPay(HttpServletRequest request, HttpSession session) throws Exception{
-//			
-//			System.out.println("1111111");
-//			
-//			return "redirect:" + kakaopay.KakaoPayReady();
-//		}
-   
-	    //@Setter(onMethod_ = @Autowired)
-	    //private KakaoPay kakaopay;
+	    
+	    @Setter(onMethod_ = @Autowired)
+	    private KakaoPay kakaopay;
 	    
 	    
-	    //@GetMapping("/kakaoPay")
-	    //public void kakaoPayGet() {
-		//}
-	    
-	    //@PostMapping("/kakaoPay")
-	    //public String kakaoPay() {
-	    //    log.info("kakaoPay post............................................");
+	    @GetMapping("/kakaoPay")
+	    public void kakaoPayGet() {
 	        
-	    //    return "redirect:" + kakaopay.KakaoPayReady();
-	    //}
+	    }
 	    
-	    //@GetMapping("/kakaoPaySuccess")
-	    //public void kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
-	        //log.info("kakaoPaySuccess get............................................");
-	        //log.info("kakaoPaySuccess pg_token : " + pg_token);
+	    @PostMapping("/kakaoPay")
+	    public String kakaoPay() {
+	        log.info("kakaoPay post............................................");
 	        
-	        //model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token));
-	        
-	    //}
+	        return "redirect:" + kakaopay.KakaoPayReady();
+	 
+	    }
 	    
-}
+	    @GetMapping("/kakaoPaySuccess")
+	    public void kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
+	        log.info("kakaoPaySuccess get............................................");
+	        log.info("kakaoPaySuccess pg_token : " + pg_token);
+	        
+	        model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token));
+	        
+	    }
+	    
+	}
+	    
+
 

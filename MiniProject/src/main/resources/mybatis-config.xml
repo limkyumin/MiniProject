@@ -11,6 +11,7 @@
 		<typeAlias type="my.mini.project.user.model.vo.User" alias="user"/>
 		<typeAlias type="my.mini.project.notice.model.vo.Notice" alias="notice"/>
 		<typeAlias type="my.mini.project.product.model.vo.Product" alias="product"/>
+<!-- 		<typeAlias type="my.mini.project.kakao.model.vo.*" alias="kakao"/> -->
 	</typeAliases>
 	
 	<!-- 

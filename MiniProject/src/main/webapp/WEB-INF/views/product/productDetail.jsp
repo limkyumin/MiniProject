@@ -4,7 +4,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="icon" type="image/png" href="./resources/images/zip3.png">
 <meta charset="UTF-8">
 <title>상품판매</title>
 
@@ -27,7 +26,7 @@
 
 <!-- 아임포트 -->
  <!-- iamport.payment.js -->
-  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-{SDK-최신버전}.js"></script>
+  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment.js"></script>
 
 <style>
 	.content {
@@ -120,13 +119,12 @@
 			<c:if test="${loginUser.userId ne p.userId }">
 				<a class="btn btn-danger" id="buy">구매</a>
 			</c:if>
-			
-			<a class="btn btn-danger" onclick="productSell();">
-    			카카오페이</a>
     			
-    		<a class="btn btn-danger" onclick="productKakao();" id="#kakao">
+    		<a class="btn btn-danger" id="kakao">
     			카페</a>
 			
+			<a class="btn btn-danger" id="boot">
+    			boot</a>
 		</div>
 		<script>
 		function productUpdate(){
@@ -135,14 +133,6 @@
 		
 		function productDelete(){
 			$("#postform").attr("action", "productDelete.ui").submit();
-		}
-		
-		function productSell(){
-			$("#postform").attr("action", "kakaoPay.ui").submit();
-		}
-		
-		function productKakao(){
-			$("#postform").attr("action", "kakao.ui").submit();
 		}
 		
 		</script>
@@ -182,18 +172,20 @@
 		<script>
 		<!-- 카카오 -->
 		$(function(){
+			IMP.init('imp18673883');
 			$('#kakao').click(function(){
 				$.ajax({
 					url:"kakao.ui" ,
 					dataType: 'json' ,
 					success:function(data){
 						var box = data.next_redirect_pc_url;
-						console.log('성공임?');
-						window.open(box);
-						console.log('성공임?');
+						//console.log(data);
+						window.open(box);	
+						
 					},
 					error:function(error){
 						alert(error);
+						console.log('ㅇㅇㅇㅇㅇㅇㅇ');
 					}
 				});
 			});
@@ -201,7 +193,10 @@
 			
 		</script>
 		
+		<!-- 부트 -->
+		<script>
 		
+		</script>
 		
 
 		<br><br>
