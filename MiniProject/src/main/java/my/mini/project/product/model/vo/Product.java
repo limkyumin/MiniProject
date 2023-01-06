@@ -18,4 +18,5 @@ public class Product {
 	private String productStatus;	//	PRODUCT_STATUS	VARCHAR2(1 BYTE)
 //	private String thumbnail;
 	private String userId;
+	private String tid, next_redirect_pc_url;
 }

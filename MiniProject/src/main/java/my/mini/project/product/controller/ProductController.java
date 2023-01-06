@@ -16,13 +16,18 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.java.Log;
 import my.mini.project.common.model.vo.PageInfo;
 import my.mini.project.common.template.Pagination;
+import my.mini.project.kakao.model.service.KakaoPay;
 import my.mini.project.product.model.service.ProductService;
 import my.mini.project.product.model.vo.Product;
 
@@ -32,6 +37,12 @@ public class ProductController {
 	
 	@Autowired
 	ProductService Productservice;
+	
+	@Autowired
+	private KakaoPay kakaopay;
+	
+//	@Autowired
+//	private String tid;
 	
 	//상품 판매 페이지 메인
 	@RequestMapping("productMain.ui")
@@ -203,43 +214,28 @@ public class ProductController {
 	
 	@ResponseBody
 	@RequestMapping("productSell.ui")
-	public String productSuccess(@RequestParam("pg_token") String pg_token, Model model) {
+	public String productSuccess(@RequestParam("pg_token") /*String pg_token, @ModelAttribute("tid") String tid,*/ Model model) {
 		 
 		log.info("kakaoPaySuccess get............................................");
 	    log.info("kakaoPaySuccess pg_token : " + pg_token);
-	   
-	    model.addAttribute("info", pg_token);
-	     
-	     
-	     
-//		RestTemplate restTemplate = new RestTemplate();
-//	       
-//	    // 서버로 요청할 Header
-//		HttpHeaders headers = new HttpHeaders();
-//	    headers.add("Authorization", "KakaoAK " + "7a96f0ac17cb9603eaa371eb185eef21");
-//	    headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
-//	    headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
+//	    log.info("kakaoPaySuccess tid : " + tid);
+//	  
 //	    
-//	    // 서버로 요청할 Body
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-//		
-//        params.add("cid", "TC0ONETIME");
-//        params.add("tid", kakaoPayReadyVO.getTid());
-//        params.add("partner_order_id", "1001");
-//        params.add("partner_user_id", "gorany");
-//        params.add("pg_token", pg_token);
-//        params.add("total_amount", "2100");
-//		
-//        
-//        "cid=TC0ONETIME&"
-//		+ "partner_order_id=partner_order_id&"
-//		+ "partner_user_id=partner_user_id&"
-//		+ "item_name=초코파이&quantity=1&total_amount=2200&"
-//		+ "vat_amount=200&tax_free_amount=0&"
-//		+ "approval_url=http://localhost:8989/project/productSell.ui&"
-//		+ "fail_url=http://localhost:8989/productSell.ui&"
-//		+ "cancel_url=http://localhost:8989/productSell.ui";
-//        
+//	    MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+//	    params.add("pg_token", pg_token);
+//	    params.add("tid", tid);
+//	    
+//	    RestTemplate template = new RestTemplate();
+//	    String url = "https://kapi.kakao.com/v1/payment/approve";
+//	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
         return "product/test";
 	}
 	

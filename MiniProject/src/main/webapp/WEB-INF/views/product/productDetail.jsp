@@ -157,7 +157,7 @@
 			        buyer_email : "testiamport@naver.com", 
 			        buyer_name : "홍길동",
 			        buyer_tel : "01012341234"
-				}, function(rsp) {
+				}, function(rsp) {q
 					if(rsp.success){
 						alert('결제 성공');
 						console.log('성공');
