@@ -1,15 +1,13 @@
 package my.mini.project.kakao.model.vo;
-
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Data;
-
+ 
 @Data
 public class KakaoPayReadyVO {
-
-	//response
+    
+    //response
     private String tid, next_redirect_pc_url;
     private Date created_at;
-    
     
 }

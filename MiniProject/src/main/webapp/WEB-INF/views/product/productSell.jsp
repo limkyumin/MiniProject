@@ -52,71 +52,21 @@
 
 </head>
 <body>
-
-	<div class="hero page-inner overlay" style="background-image: url('./resources/images/hero_bg_1.jpg'); height: 200px;">
-
-		<div class="container">
-			<div class="row justify-content-center align-items-center" style="height: 300px;">
-				<div class="col-lg-9 text-center mt-5">
-					<h1 class="heading" data-aos="fade-up" style="padding-top: 50px;">상품 구매</h1>
-				</div>
-			</div>
-		</div>
-
-	</div>
-
-	<div class="content">
-		<br><br>
-		<div class="innerOuter">
-			<br><br>
-
-			<form id="enrollForm" method="post" action="productInsert.ui">
-				
-				
-				<div class="form-group">
-                
-					               
-                	
-                    <label for="productName">* 제목 : </label>
-                    <input type="text" class="form-control" id="productName" placeholder="제목을 입력하세요" name="productName" value="${p.productName }" required> <br>
-					
-					<label for="productType">* 상품유형 : </label>
-                    <input type="text" class="form-control" id="productType" placeholder="상품 유형을 입력하세요(ex 고양이,강아지 등...)" name="productType" value="${p.productType }" required> <br>
-                    
-                    <label for="productCount">* 상품개수 : </label>
-                    <input type="text" class="form-control" id="productCount" placeholder="개수를 입력하세요(숫자만)" name="productCount" value="${p.productCount }" required> <br>
-
-                    
-					
-                    <label for="productPrice">* 상품 가격 : </label>
-                    <input type="text" class="form-control" id="productPrice" placeholder="숫자만 입력하세요(숫자만)" name="productPrice" value="${p.productPrice }" required> <br>
-                    
-                    <label for="productContent">* 내용 : </label>
-                    <textarea class="form-control" rows="30" id="productContent" placeholder="내용을 입력하세요" name="productContent" value="${p.productContent }" required></textarea> <br>
-                    
-                </div>
-				
-				<div align="center">
-					<input type="hidden" value="${loginUser.userNo }" name="productWriter">
-					<button type="submit" id="kakao" class="btn btn-primary" >구매하기</button>
-				</div>
-			</form>
-			
-			
-		
-<!-- <script type="text/javascript"> -->
-
-<!-- </script> -->
-
-
-
-
-
-
-		</div>
-		<br><br>
-	</div>
-
+	
+	
+	카카오페이 결제가 정상적으로 완료되었습니다.
+	 
+	결제일시:     [[${info.approved_at}]]<br/>
+	주문번호:    [[${info.partner_order_id}]]<br/>
+	상품명:    [[${info.item_name}]]<br/>
+	상품수량:    [[${info.quantity}]]<br/>
+	결제금액:    [[${info.amount.total}]]<br/>
+	결제방법:    [[${info.payment_method_type}]]<br/>
+	 
+	 
+	 
+	<h2>[[${info}]]</h2>
+	
 	<jsp:include page="../common/footer.jsp" />
 
 	

@@ -8,26 +8,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.java.Log;
 import my.mini.project.common.model.vo.PageInfo;
 import my.mini.project.common.template.Pagination;
-import my.mini.project.kakao.model.service.KakaoPay;
+import my.mini.project.kakao.model.vo.KakaoPayApprovalVO;
+import my.mini.project.kakao.model.vo.KakaoPayReadyVO;
 import my.mini.project.product.model.service.ProductService;
 import my.mini.project.product.model.vo.Product;
 
@@ -38,11 +40,9 @@ public class ProductController {
 	@Autowired
 	ProductService Productservice;
 	
-	@Autowired
-	private KakaoPay kakaopay;
+	KakaoPayApprovalVO kakaoPayApprovalVO;
 	
-//	@Autowired
-//	private String tid;
+	KakaoPayReadyVO kakaoPayReadyVO;
 	
 	//상품 판매 페이지 메인
 	@RequestMapping("productMain.ui")
@@ -160,9 +160,12 @@ public class ProductController {
 	@ResponseBody
 	public String productSell() {
 		
+		RestTemplate restTemplate = new RestTemplate();
+		
 		try {
 			
 			URL kakao = new URL("https://kapi.kakao.com/v1/payment/ready"); //웹상주소 URL 선언
+			String abc = "https://kapi.kakao.com/v1/payment/ready";
 			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
 			hrc.setRequestMethod("POST"); //포스트 방식
 			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
@@ -172,7 +175,7 @@ public class ProductController {
 			String kakaoParameter = "cid=TC0ONETIME&"
 					+ "partner_order_id=partner_order_id&"
 					+ "partner_user_id=partner_user_id&"
-					+ "item_name=초코파이&quantity=1&total_amount=2200&"
+					+ "item_name=hi&quantity=1&total_amount=1000&"
 					+ "vat_amount=200&tax_free_amount=0&"
 					+ "approval_url=http://localhost:8989/project/productSell.ui&"
 					+ "fail_url=http://localhost:8989/productSell.ui&"
@@ -184,70 +187,60 @@ public class ProductController {
 			giveData.close();
 			
 			int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
-			
 			InputStream receive; //받는애
-			
+//			try(BufferedReader br = new BufferedReader(
+//					new InputStreamReader(hrc.getInputStream(), "utf-8"))) {
+//				StringBuilder response = new StringBuilder();
+//				String responseLine = null;
+//				while ((responseLine = br.readLine()) != null) {
+//					response.append(responseLine.trim());
+//				}
+//				System.out.println(response.toString());
+//			}
 			if(result == 200) { //http 코드에서 200은 성공했을때의 코드임.
 				receive = hrc.getInputStream();
-				
-				
 			}else {
 				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
 			}
-			//위의 인풋스트림은 받을줄만 알지 읽을 수 없음 그래서 밑에 reader 선언
-			InputStreamReader reader = new InputStreamReader(receive); //reader에 inputstream 매개변수 선언
-			BufferedReader change = new BufferedReader(reader); //형변환하는애
-			System.out.println("카카오톡 페이 넘어와요? 마지막 시스아웃");
-			return change.readLine();
+//			kakaoPayReadyVO = restTemplate.postForObject(new URI(abc), kakaoParameter, KakaoPayReadyVO.class);
+//			return kakaoPayReadyVO.getNext_redirect_pc_url();
 			
+			// 읽는 부분
+			InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
+			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
+			// 받는 부분
+			return change.readLine(); // 문자열로 형변환을 알아서 해주고 찍어낸다 그리고 본인은 비워진다.
 		} catch (MalformedURLException e) {
-
 			e.printStackTrace();
 		} catch (IOException e) {
-
+			e.printStackTrace();
+		} catch (RestClientException e) {
 			e.printStackTrace();
 		}
-		
-		return "product/ProductMain";
+		return "";
 	}
-	
 	
 	@ResponseBody
 	@RequestMapping("productSell.ui")
-	public String productSuccess(@RequestParam("pg_token") /*String pg_token, @ModelAttribute("tid") String tid,*/ Model model) {
-		 
-		log.info("kakaoPaySuccess get............................................");
-	    log.info("kakaoPaySuccess pg_token : " + pg_token);
-//	    log.info("kakaoPaySuccess tid : " + tid);
-//	  
-//	    
-//	    MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-//	    params.add("pg_token", pg_token);
-//	    params.add("tid", tid);
-//	    
-//	    RestTemplate template = new RestTemplate();
-//	    String url = "https://kapi.kakao.com/v1/payment/approve";
-//	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-        return "product/test";
+	public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token,
+			@RequestParam("tid") String tid,@RequestParam("next_redirect_pc_url") String next_redirect_pc_url,
+			@RequestParam("created_at") Date created_at,
+			Model model) {
+        log.info("kakaoPaySuccess get............................................");
+        log.info("kakaoPaySuccess pg_token : " + pg_token);
+        System.out.println("pg_token" + pg_token);
+        System.out.println("tid" + tid);
+        System.out.println("next_redirect_pc_url" + next_redirect_pc_url);
+        System.out.println("created_at" + created_at);
+
+        model.addAttribute("pg_token", pg_token);
+        
+		
+        return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	    
 }
+	
+	
+	
