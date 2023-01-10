@@ -165,29 +165,33 @@ public class ProductController {
 		try {
 			
 			URL kakao = new URL("https://kapi.kakao.com/v1/payment/ready"); //웹상주소 URL 선언
-			String abc = "https://kapi.kakao.com/v1/payment/ready";
+//			String abc = "https://kapi.kakao.com/v1/payment/ready";
 			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
 			hrc.setRequestMethod("POST"); //포스트 방식
 			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
 			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 			hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
 			
-			String kakaoParameter = "cid=TC0ONETIME&"
-					+ "partner_order_id=partner_order_id&"
-					+ "partner_user_id=partner_user_id&"
-					+ "item_name=hi&quantity=1&total_amount=1000&"
-					+ "vat_amount=200&tax_free_amount=0&"
-					+ "approval_url=http://localhost:8989/project/productSell.ui&"
-					+ "fail_url=http://localhost:8989/productSell.ui&"
-					+ "cancel_url=http://localhost:8989/productSell.ui";
+			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
+					+ "partner_order_id=kyumin&" 	//가맹점 주문번호
+					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
+					+ "item_name=hi&"						//상품명
+					+ "quantity=1&"							//수량
+					+ "total_amount=1000&"					//가격
+					+ "vat_amount=200&"						//부가세
+					+ "tax_free_amount=0&"					//상품 비과세
+					+ "approval_url=http://localhost:8989/project/productSell.ui?partner_order_id&"	//결제 성공시
+					+ "fail_url=http://localhost:8989/productSell.ui&"				//결제 실패시
+					+ "cancel_url=http://localhost:8989/productSell.ui";			//결제 성공시
 			
 			OutputStream give = hrc.getOutputStream(); //주는애
 			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
-			giveData.writeBytes(kakaoParameter);
-			giveData.close();
-			
+			giveData.writeBytes(kakaoParameter); // OutputStream은 데이터를 바이트 형식으로 주고 받기로 약속되어 있다. (형변환)
+			giveData.close(); // flush가 자동으로 호출이 되고 닫는다. (보내고 비우고 닫다)
+					
 			int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
 			InputStream receive; //받는애
+			
 //			try(BufferedReader br = new BufferedReader(
 //					new InputStreamReader(hrc.getInputStream(), "utf-8"))) {
 //				StringBuilder response = new StringBuilder();
@@ -210,31 +214,38 @@ public class ProductController {
 			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
 			// 받는 부분
 			return change.readLine(); // 문자열로 형변환을 알아서 해주고 찍어낸다 그리고 본인은 비워진다.
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (RestClientException e) {
-			e.printStackTrace();
 		}
+		
 		return "";
 	}
+	
+//	@ResponseBody
+//	@RequestMapping("productSell.ui")
+//	public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
+//		
+//		System.out.println("pg_token" + pg_token);
+//		
+//		return "";
+//	}
 	
 	@ResponseBody
 	@RequestMapping("productSell.ui")
 	public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token,
-			@RequestParam("tid") String tid,@RequestParam("next_redirect_pc_url") String next_redirect_pc_url,
-			@RequestParam("created_at") Date created_at,
+			@RequestParam("partner_order_id") String partner_order_id,
 			Model model) {
         log.info("kakaoPaySuccess get............................................");
         log.info("kakaoPaySuccess pg_token : " + pg_token);
         System.out.println("pg_token" + pg_token);
-        System.out.println("tid" + tid);
-        System.out.println("next_redirect_pc_url" + next_redirect_pc_url);
-        System.out.println("created_at" + created_at);
+        System.out.println("partner_order_id" + partner_order_id);
+
 
         model.addAttribute("pg_token", pg_token);
-        
+        model.addAttribute("partner_order_id",partner_order_id);
 		
         return null;
 	}
