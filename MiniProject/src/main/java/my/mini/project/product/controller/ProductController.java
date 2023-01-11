@@ -8,29 +8,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.java.Log;
 import my.mini.project.common.model.vo.PageInfo;
 import my.mini.project.common.template.Pagination;
-import my.mini.project.kakao.model.vo.KakaoPayApprovalVO;
-import my.mini.project.kakao.model.vo.KakaoPayReadyVO;
+import my.mini.project.product.model.service.OrderService;
 import my.mini.project.product.model.service.ProductService;
+import my.mini.project.product.model.vo.Order;
 import my.mini.project.product.model.vo.Product;
 
 @Log
@@ -40,9 +39,12 @@ public class ProductController {
 	@Autowired
 	ProductService Productservice;
 	
-	KakaoPayApprovalVO kakaoPayApprovalVO;
+	@Autowired
+	OrderService orderService;
 	
-	KakaoPayReadyVO kakaoPayReadyVO;
+//	KakaoPayApprovalVO kakaoPayApprovalVO;
+//	
+//	KakaoPayReadyVO kakaoPayReadyVO;
 	
 	//상품 판매 페이지 메인
 	@RequestMapping("productMain.ui")
@@ -156,14 +158,17 @@ public class ProductController {
 	//상품구매
 	/*https://developers.kakao.com/docs/latest/ko/kakaopay/common 카카오페이 결제 프로세스 참조
 	*/
-	@RequestMapping("kakao.ui")
+	@RequestMapping("kakao")
 	@ResponseBody
 	public String productSell() {
 		
-		RestTemplate restTemplate = new RestTemplate();
+		/*step 1)주문번호를 체번한다.
+		*/
+		//주문번호에 대한 객체생성
+		String orderNo = "12345";
 		
 		try {
-			
+			//step 2)카카오에 결제모듈을 띄울 때 주문번호 객체 + "정보" 같이 보내준다
 			URL kakao = new URL("https://kapi.kakao.com/v1/payment/ready"); //웹상주소 URL 선언
 //			String abc = "https://kapi.kakao.com/v1/payment/ready";
 			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
@@ -173,16 +178,16 @@ public class ProductController {
 			hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
 			
 			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
-					+ "partner_order_id=kyumin&" 	//가맹점 주문번호
+					+ "partner_order_id=" + orderNo + "&" 	//가맹점 주문번호
 					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
 					+ "item_name=hi&"						//상품명
 					+ "quantity=1&"							//수량
 					+ "total_amount=1000&"					//가격
 					+ "vat_amount=200&"						//부가세
 					+ "tax_free_amount=0&"					//상품 비과세
-					+ "approval_url=http://localhost:8989/project/productSell.ui?partner_order_id&"	//결제 성공시
+					+ "approval_url=http://localhost:8989/project/" + orderNo + "/productSell.ui&"	//결제 성공시
 					+ "fail_url=http://localhost:8989/productSell.ui&"				//결제 실패시
-					+ "cancel_url=http://localhost:8989/productSell.ui";			//결제 성공시
+					+ "cancel_url=http://localhost:8989/productSell.ui";			//결제 취소시
 			
 			OutputStream give = hrc.getOutputStream(); //주는애
 			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
@@ -192,56 +197,90 @@ public class ProductController {
 			int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
 			InputStream receive; //받는애
 			
-//			try(BufferedReader br = new BufferedReader(
-//					new InputStreamReader(hrc.getInputStream(), "utf-8"))) {
-//				StringBuilder response = new StringBuilder();
-//				String responseLine = null;
-//				while ((responseLine = br.readLine()) != null) {
-//					response.append(responseLine.trim());
-//				}
-//				System.out.println(response.toString());
-//			}
 			if(result == 200) { //http 코드에서 200은 성공했을때의 코드임.
 				receive = hrc.getInputStream();
 			}else {
 				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
 			}
-//			kakaoPayReadyVO = restTemplate.postForObject(new URI(abc), kakaoParameter, KakaoPayReadyVO.class);
-//			return kakaoPayReadyVO.getNext_redirect_pc_url();
-			
+		
 			// 읽는 부분
 			InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
 			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
 			// 받는 부분
-			return change.readLine(); // 문자열로 형변환을 알아서 해주고 찍어낸다 그리고 본인은 비워진다.
+			
+			/*step 3 
+				주문번호 객체(orderNo)를 카카오에 보내고
+				tid, next_redirect_pc_url를 받아온다.
+				
+				String으로 받아왔기에 값 하나하나 꺼내주려면 json형태로 형변환을 해줘야한다
+				(json형태로 꺼내온 것을 다시 toString으로 문자열 형변환을 해줌)
+				
+			*/
+			String input = change.readLine(); 
+			//{"tid":"T3bea397003e7c9849e0","tms_result":false,"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/aInfo","next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/mInfo","next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/info","android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","created_at":"2023-01-11T20:55:03"}
+			
+			JSONParser parser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) parser.parse(input); 
+			//json 형태로 형변환
+			
+			System.out.println(jsonObject.get("tid"));
+			//T3be99db003e7c98479f
+			System.out.println(jsonObject.get("next_redirect_pc_url"));
+			//https://online-pay.kakao.com/mockup/v1/0d0fb429e6ca136cfbfeccf44b67a4a8f998437e5a3eb00bc0abb630b2a975c9/info
+			
+			
+			/*step 4
+				ORDER_TEST(임시테이블)에  orderNo, tid 를 저장한다
+			*/
+			Order o = new Order();
+			o.setPartner_order_id(orderNo);
+			o.setTid(jsonObject.get("tid").toString());
+			
+			//저장할 service 선언
+			int order = orderService.insertOrderTemp(o);
+			
+			//리턴할 url을 json형태로 꺼내온 뒤 tostring 형변환
+			//view datatype : text
+			return (jsonObject.get("next_redirect_pc_url").toString()); 
+			
 			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return "";
 	}
 	
-//	@ResponseBody
-//	@RequestMapping("productSell.ui")
-//	public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-//		
-//		System.out.println("pg_token" + pg_token);
-//		
-//		return "";
-//	}
 	
+	    
 	@ResponseBody
-	@RequestMapping("productSell.ui")
-	public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token,
-			@RequestParam("partner_order_id") String partner_order_id,
+	@RequestMapping("{partner_order_id}/productSell.ui")
+	public String kakaoPaySuccess(
+			@RequestParam("pg_token") String pg_token,
+			@PathVariable("partner_order_id") String partner_order_id,
 			Model model) {
         log.info("kakaoPaySuccess get............................................");
         log.info("kakaoPaySuccess pg_token : " + pg_token);
         System.out.println("pg_token" + pg_token);
         System.out.println("partner_order_id" + partner_order_id);
+        
+        //step 5.
+        //DB에서 tid 를 꺼내와야 한다(select)
+        
+        //step 6.
+        //카카오에 tid,token을 결제승인 api 요청
+        
+        //step 7.
+        //카카오에서 결제성공시 나올 view 띄우기
+        
+        
+        
+        
 
 
         model.addAttribute("pg_token", pg_token);

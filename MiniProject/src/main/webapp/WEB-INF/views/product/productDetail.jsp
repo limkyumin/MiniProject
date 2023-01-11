@@ -175,17 +175,18 @@
 			IMP.init('imp18673883');
 			$('#kakao').click(function(){
 				$.ajax({
-					url:"kakao.ui" ,
-					dataType: 'json' ,
+					url:"kakao" ,
+					dataType: 'text' ,
 					success:function(data){
-						var box = data.next_redirect_pc_url;
+						var box = data;
 						//console.log(data);
 						window.open(box);	
 						
 					},
 					error:function(error){
 						alert(error);
-						console.log('ㅇㅇㅇㅇㅇㅇㅇ');
+						console.log(error);
+						console.log("jj");
 					}
 				});
 			});
