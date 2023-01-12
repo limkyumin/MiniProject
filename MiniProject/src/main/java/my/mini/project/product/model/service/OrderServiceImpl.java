@@ -17,14 +17,6 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-//	@Override
-//	public int orderTest(Order o) {
-//		
-//		int order = Orderdao.orderTest(sqlSession,o); 
-//		
-//		return order;
-//	}
-
 	@Override
 	public int insertOrderTemp(Order o) {
 		
@@ -32,5 +24,14 @@ public class OrderServiceImpl implements OrderService {
 		
 		return order;
 	}
+
+	@Override
+	public int selectTid(Order o) {
+
+		int selectTid = orderDao.selectTid(o, sqlSession);
+		
+		return selectTid;
+	}
+	
 	
 }
