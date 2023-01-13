@@ -8,12 +8,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +21,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,20 +39,16 @@ import my.mini.project.product.model.vo.Product;
 @Controller
 public class ProductController {
 	
-	//Java에서는 Date 클래스와 String 클래스 사이에 파싱을 도와주는 SimpleDateFormat 클래스
-	// 현재 시간을 Date 객체로 가져옴
-	Date date = new Date();		
-	// SimpleDateFormat 객체 생성
-	String datePattern = "yyyyMMddHHmmss";
-	SimpleDateFormat format = new SimpleDateFormat(datePattern);
-	// 문자열로 변환
-	String dateStr = format.format(date);
-	
-//	Calendar now = Calendar.getInstance();
+//	//Java에서는 Date 클래스와 String 클래스 사이에 파싱을 도와주는 SimpleDateFormat 클래스
+//	// 현재 시간을 Date 객체로 가져옴
+//	Date date = new Date();		
+//	// SimpleDateFormat 객체 생성
+//	String datePattern = "yyyyMMddHHmmss";
+//	SimpleDateFormat format = new SimpleDateFormat(datePattern);
+//	// 문자열로 변환
+//	String dateStr = format.format(date);
 //	
-//	String GOOD = format.format(now.getTime());
-	
-	String orderNo = "" + dateStr;
+//	String orderNo = "" + dateStr;
 	
 	@Autowired
 	ProductService Productservice;
@@ -61,10 +56,7 @@ public class ProductController {
 	@Autowired
 	OrderService orderService;
 	
-//	KakaoPayApprovalVO kakaoPayApprovalVO;
-//	
-//	KakaoPayReadyVO kakaoPayReadyVO;
-	
+
 	//상품 판매 페이지 메인
 	@RequestMapping("productMain.ui")
 	public String productMain(@RequestParam(value="ppage",defaultValue="1") int currentPage, Model model) {
@@ -181,7 +173,18 @@ public class ProductController {
 	@ResponseBody
 	public String productSell() {
 		
-		/*step 1)주문번호를 체번한다.
+		//Java에서는 Date 클래스와 String 클래스 사이에 파싱을 도와주는 SimpleDateFormat 클래스
+		// 현재 시간을 Date 객체로 가져옴
+		Date date = new Date();		
+		// SimpleDateFormat 객체 생성
+		String datePattern = "yyyyMMddHHmmss";
+		SimpleDateFormat format = new SimpleDateFormat(datePattern);
+		// 문자열로 변환
+		String dateStr = format.format(date);
+		
+		String orderNo = "" + dateStr;
+		
+		/*step 1)주문번호를 체번한다. //위에 dateStr로 주문번호 날짜로 생성하는거 완료 > 전역변수 세팅은 변하지 않는값만 > 그래서 컨트롤러에 선언
 		*/
 		//주문번호에 대한 객체생성
 //		String orderNo = "1"; 맨 위 컨트롤러 및 전역변수로 선언해봄. db에 똑같이 저장됨
@@ -246,7 +249,7 @@ public class ProductController {
 			System.out.println(jsonObject.get("next_redirect_pc_url"));
 			//https://online-pay.kakao.com/mockup/v1/0d0fb429e6ca136cfbfeccf44b67a4a8f998437e5a3eb00bc0abb630b2a975c9/info
 			
-			System.out.println(format.format(date));
+			System.out.println("dateStr"+dateStr);
 			
 			/*step 4
 				ORDER_TEST(임시테이블)에  orderNo, tid 를 저장한다
@@ -274,118 +277,82 @@ public class ProductController {
 		return "";
 	}
 	
+	
+    //http://localhost:8989/project/20230113151836/productSell.ui?pg_token=adcdaf8fb1b4e6ab9d39
+	//TID/매핑주소?PG토큰
 	@ResponseBody
 	@RequestMapping("{partner_order_id}/productSell.ui")
 	public String kakaoPaySuccess(
 			@RequestParam("pg_token") String pg_token,
 			@PathVariable("partner_order_id") String partner_order_id,
-			@PathVariable("tid") String tid,
-			Model model){
+//			@PathVariable("tid") String tid,
+			Model model) {
+        
+        //step 5.
+        //DB에서 tid 를 꺼내와야 한다(select)
+                
+        int selectTid = orderService.selectTid();
 
-			URL kakao;
-			try {
-				kakao = new URL("https://kapi.kakao.com/v1/payment/approve");
-				HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
-				hrc.setRequestMethod("POST"); //포스트 방식
-				hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
-				hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-				hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
-				
-				Order o = new Order();
+        
+        //step 6.
+        //카카오에 tid,token을 결제승인 api 요청
+        
+		try {
+			URL kakao = new URL("https://kapi.kakao.com/v1/payment/approve");
+			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
+			hrc.setRequestMethod("POST"); //포스트 방식
+			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
+			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+			hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
 			
-				String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
-						+ "tid=" + tid +"&"
-						+ "partner_order_id=" + orderNo + "&" 	//가맹점 주문번호
-						+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
-						+ "pg_token" + pg_token +"&"
-						+ "total_amount=1000&";					//가격
-		
-				OutputStream give = hrc.getOutputStream(); //주는애
-				DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
-				giveData.writeBytes(kakaoParameter); // OutputStream은 데이터를 바이트 형식으로 주고 받기로 약속되어 있다. (형변환)
-				giveData.close(); // flush가 자동으로 호출이 되고 닫는다. (보내고 비우고 닫다)
-						
-				int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
-				InputStream receive; //받는애
-				
-				if(result == 200) { //http 코드에서 200은 성공했을때의 코드임.
-					receive = hrc.getInputStream();
-				}else {
-					receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
-				}
+			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
+					+ "tid=" + selectTid + "&"
+					+ "partner_order_id=partner_order_id&" 	//가맹점 주문번호
+					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
+					+ "pg_token=" + pg_token + "&";
 			
-				// 읽는 부분
-				InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
-				BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
-				// 받는 부분
-				
-				/*step 3 
-					주문번호 객체(orderNo)를 카카오에 보내고
-					tid, next_redirect_pc_url를 받아온다.
+			OutputStream give = hrc.getOutputStream(); //주는애
+			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
+			giveData.writeBytes(kakaoParameter); // OutputStream은 데이터를 바이트 형식으로 주고 받기로 약속되어 있다. (형변환)
+			giveData.close(); // flush가 자동으로 호출이 되고 닫는다. (보내고 비우고 닫다)
 					
-					String으로 받아왔기에 값 하나하나 꺼내주려면 json형태로 형변환을 해줘야한다
-					(json형태로 꺼내온 것을 다시 toString으로 문자열 형변환을 해줌)
-					
-				*/
-				String input = change.readLine(); 
-		
-				JSONParser parser = new JSONParser();
-				JSONObject jsonObject = (JSONObject) parser.parse(input); 
-		
-				System.out.println(jsonObject.get("tid"));
-		
-				System.out.println(jsonObject.get("next_redirect_pc_url"));
-
-				int selectTid = orderService.selectTid(o);
-				
-				return (jsonObject.get("next_redirect_pc_url").toString()); 
-					
-				
-				
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} 
-			  catch (ProtocolException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
+			InputStream receive; //받는애
+			
+			if(result == 200) { //http 코드에서 200은 성공했을때의 코드임.
+				receive = hrc.getInputStream();
+			}else {
+				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
 			}
 		
-		return "";
-	}
+			// 읽는 부분
+			InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
+			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
+			// 받는 부분
+			
+			return "";
+			
+			
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //웹상주소 URL 선언
+		  catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
-	    
-//	@ResponseBody
-//	@RequestMapping("{partner_order_id}/productSell.ui")
-//	public String kakaoPaySuccess(
-//			@RequestParam("pg_token") String pg_token,
-//
-//			@PathVariable("partner_order_id") String partner_order_id,
-//			Model model) {
-//        log.info("kakaoPaySuccess get............................................");
-//        log.info("kakaoPaySuccess pg_token : " + pg_token);
-//        System.out.println("pg_token ddddddddd " + pg_token);
-//        System.out.println("partner_order_id dddddddd" + partner_order_id);
-//        //step 5.
-//        //DB에서 tid 를 꺼내와야 한다(select)
-//        
-//
-////        int selectTid = orderService.selectTid(o);
-//
-//        //step 6.
-//        //카카오에 tid,token을 결제승인 api 요청
-//        
-//        //step 7.
-//        //카카오에서 결제성공시 나올 view 띄우기
-//
-//        model.addAttribute("pg_token", pg_token);
-//        model.addAttribute("partner_order_id",partner_order_id);
-//		
-//        return null;
-//	}
+        
+        
+        
+        //step 7.
+        //카카오에서 결제성공시 나올 view 띄우기
+
+        model.addAttribute("pg_token", pg_token);
+        model.addAttribute("partner_order_id",partner_order_id);
+		
+        return "";
+	}
 
 	    
 }

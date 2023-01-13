@@ -8,5 +8,5 @@ public interface OrderService {
 	int insertOrderTemp(Order o);
 	
 	//step5 DB에서 tid 를 꺼내와야 한다(select)
-	int selectTid(Order o);
+	int selectTid();
 }

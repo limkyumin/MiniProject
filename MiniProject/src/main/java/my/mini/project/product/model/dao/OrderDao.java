@@ -18,9 +18,9 @@ public class OrderDao {
 		return sqlSession.insert("orderMapper.insertOrderTemp", o);
 	}
 
-	public int selectTid(Order o, SqlSessionTemplate sqlSession) {
+	public int selectTid(SqlSessionTemplate sqlSession) {
 		
-		return sqlSession.selectOne("orderMapper.selectTid", o);
+		return sqlSession.selectOne("orderMapper.selectTid");
 	}
 
 }
