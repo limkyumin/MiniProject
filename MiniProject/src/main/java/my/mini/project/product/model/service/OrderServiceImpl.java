@@ -26,9 +26,9 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public int selectTid() {
+	public String selectTid(String partner_order_id) {
 		
-		int selectTid = orderDao.selectTid(sqlSession);
+		String selectTid = orderDao.selectTid(partner_order_id, sqlSession);
 		
 		return selectTid;
 	}

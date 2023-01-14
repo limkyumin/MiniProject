@@ -24,16 +24,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-	<select id="selectTid" resultType="Order" parameterType="string">
+	<select id="selectTid" parameterType="String" resultType="String">
+	
 		SELECT TID
-			FROM(
-			    SELECT TID
-			    FROM ORDER_TEST
-			    ORDER BY ROWNUM DESC
-			)
-		WHERE ROWNUM = 1
+        FROM ORDER_TEST
+        WHERE PARTNER_ORDER_ID = #{partner_order_id}
+	
 	</select>
-
+<!-- 	SELECT TID -->
+<!-- 			FROM( -->
+<!-- 			    SELECT TID -->
+<!-- 			    FROM ORDER_TEST -->
+<!-- 			    ORDER BY ROWNUM DESC -->
+<!-- 			) -->
+<!-- 		WHERE ROWNUM = 1 -->
 
 
 

@@ -21,7 +21,6 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -206,7 +205,8 @@ public class ProductController {
 					+ "total_amount=1000&"					//가격
 					+ "vat_amount=200&"						//부가세
 					+ "tax_free_amount=0&"					//상품 비과세
-					+ "approval_url=http://localhost:8989/project/" + orderNo + "/productSell.ui&"	//결제 성공시
+//					+ "approval_url=http://localhost:8989/project/" + orderNo + "/productMain.ui&"	//결제 성공시
+					+ "approval_url=http://localhost:8989/project/productMain.ui&"
 					+ "fail_url=http://localhost:8989/productSell.ui&"				//결제 실패시
 					+ "cancel_url=http://localhost:8989/productSell.ui";			//결제 취소시
 			
@@ -281,7 +281,7 @@ public class ProductController {
     //http://localhost:8989/project/20230113151836/productSell.ui?pg_token=adcdaf8fb1b4e6ab9d39
 	//TID/매핑주소?PG토큰
 	@ResponseBody
-	@RequestMapping("{partner_order_id}/productSell.ui")
+	@RequestMapping("{partner_order_id}/productMain.ui")
 	public String kakaoPaySuccess(
 			@RequestParam("pg_token") String pg_token,
 			@PathVariable("partner_order_id") String partner_order_id,
@@ -290,9 +290,9 @@ public class ProductController {
         
         //step 5.
         //DB에서 tid 를 꺼내와야 한다(select)
-                
-        int selectTid = orderService.selectTid();
-
+        
+        String selectTid = orderService.selectTid(partner_order_id);
+       
         
         //step 6.
         //카카오에 tid,token을 결제승인 api 요청
@@ -307,7 +307,7 @@ public class ProductController {
 			
 			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
 					+ "tid=" + selectTid + "&"
-					+ "partner_order_id=partner_order_id&" 	//가맹점 주문번호
+					+ "partner_order_id=" + partner_order_id + "&" 	//가맹점 주문번호
 					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
 					+ "pg_token=" + pg_token + "&";
 			
@@ -330,15 +330,24 @@ public class ProductController {
 			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
 			// 받는 부분
 			
-			return "";
+			String input = change.readLine(); 
+			//{"tid":"T3bea397003e7c9849e0","tms_result":false,"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/aInfo","next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/mInfo","next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/info","android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","created_at":"2023-01-11T20:55:03"}
 			
+			JSONParser parser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) parser.parse(input); 
 			
+			System.out.println("tid" + selectTid);
+//			return (jsonObject.get("partner_order_id").toString()); 
+			return "redirect:productMain.ui";
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
-		} //웹상주소 URL 선언
+		} 
 		  catch (IOException e) {
-			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		} catch (ParseException e) {
+
 			e.printStackTrace();
 		}
 	
@@ -348,8 +357,7 @@ public class ProductController {
         //step 7.
         //카카오에서 결제성공시 나올 view 띄우기
 
-        model.addAttribute("pg_token", pg_token);
-        model.addAttribute("partner_order_id",partner_order_id);
+//		model.addAttribute("pg_token", pg_token);
 		
         return "";
 	}
