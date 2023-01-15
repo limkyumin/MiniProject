@@ -336,6 +336,21 @@ public class ProductController {
 			JSONParser parser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) parser.parse(input); 
 			
+			/* 취소 step1)
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 주문정보 -> 결제정보 저장(새로운 테이블) 세팅해야한다.
+			
+			* new CancelVO???
+			*
+			*
+			*
+			*
+			*/
 			System.out.println("tid" + selectTid);
 //			return (jsonObject.get("partner_order_id").toString()); 
 			return "redirect:productMain.ui";
