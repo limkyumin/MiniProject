@@ -12,6 +12,7 @@
 		<typeAlias type="my.mini.project.notice.model.vo.Notice" alias="notice"/>
 		<typeAlias type="my.mini.project.product.model.vo.Product" alias="product"/>
 		<typeAlias type="my.mini.project.product.model.vo.Order" alias="order"/>
+		<typeAlias type="my.mini.project.product.model.vo.orderCancel" alias="cancel"/>
 <!-- 		<typeAlias type="my.mini.project.kakao.model.vo.*" alias="kakao"/> -->
 	</typeAliases>
 	
@@ -28,6 +29,7 @@
 		<mapper resource="/mappers/notice-mapper.xml"/>
 		<mapper resource="/mappers/product-mapper.xml"/>
 		<mapper resource="/mappers/order-mapper.xml"/>
+		<mapper resource="/mappers/cancel-mapper.xml"/>
 	<!-- 	<mapper resource="/mappers/member-mapper.xml"/>	
 		<mapper resource="/mappers/board-mapper.xml"/>  -->
 	</mappers>

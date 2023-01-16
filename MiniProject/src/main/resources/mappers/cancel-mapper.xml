@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="cancelMapper">
+	
+	<resultMap type="cancel" id="cancelResultSet">
+		<result column="CID" property="cid"/>
+		<result column="TID" property="tid"/>
+		<result column="CANCEL_AMOUNT" property="cancel_amount"/>
+		<result column="CANCEL_TAX_FREE_AMOUNT" property="cancel_tax_free_amount"/>
+		<result column="CANCEL_YN" property="cancel_yn"/>
+	</resultMap>
+
+	<insert id="cancelOrder" parameterType="cancel">
+		INSERT INTO ORDER_CANCEL(
+								CID,
+								TID,
+								CANCEL_AMOUNT,
+								CANCEL_TAX_FREE_AMOUNT,
+								CANCEL_YN
+								)
+							VALUES(
+									#{cid},
+									#{tid},
+									#{cancel_amount},
+									#{cancel_tax_free_amount},
+									#{cancel_yn}
+							)
+	</insert>
+
+
+
+
+</mapper>

@@ -4,6 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import my.mini.project.product.model.vo.Order;
+import my.mini.project.product.model.vo.orderCancel;
 
 @Repository
 public class OrderDao {
@@ -21,6 +22,11 @@ public class OrderDao {
 	public String selectTid(String partner_order_id, SqlSessionTemplate sqlSession) {
 		
 		return sqlSession.selectOne("orderMapper.selectTid", partner_order_id);
+	}
+
+	public int cancelOrder(orderCancel c, SqlSessionTemplate sqlSession) {
+		
+		return sqlSession.insert("cancelMapper.cancelOrder", c);
 	}
 
 }

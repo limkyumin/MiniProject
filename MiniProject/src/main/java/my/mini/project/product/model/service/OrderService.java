@@ -1,6 +1,7 @@
 package my.mini.project.product.model.service;
 
 import my.mini.project.product.model.vo.Order;
+import my.mini.project.product.model.vo.orderCancel;
 
 public interface OrderService {
 
@@ -9,5 +10,8 @@ public interface OrderService {
 	
 	//step5 DB에서 tid 를 꺼내와야 한다(select)
 	String selectTid(String partner_order_id);
+
+	//취소
+	int cancelOrder(orderCancel c);
 	
 }

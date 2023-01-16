@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import my.mini.project.product.model.dao.OrderDao;
 import my.mini.project.product.model.dao.ProductDao;
 import my.mini.project.product.model.vo.Order;
+import my.mini.project.product.model.vo.orderCancel;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -31,6 +32,15 @@ public class OrderServiceImpl implements OrderService {
 		String selectTid = orderDao.selectTid(partner_order_id, sqlSession);
 		
 		return selectTid;
+	}
+	
+	//취소 
+	@Override
+	public int cancelOrder(orderCancel c) {
+		
+		int cancel = orderDao.cancelOrder(c, sqlSession);
+		
+		return cancel;
 	}
 	
 

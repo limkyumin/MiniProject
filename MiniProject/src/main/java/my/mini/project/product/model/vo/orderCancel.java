@@ -1,5 +1,8 @@
 package my.mini.project.product.model.vo;
 
+import lombok.Data;
+
+@Data
 public class orderCancel {
 	
 	private String cid;
