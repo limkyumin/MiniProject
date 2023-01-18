@@ -116,15 +116,9 @@
 				<a class="btn btn-danger" onclick="productDelete();">삭제</a>
 			</c:if>
 			
-			<c:if test="${loginUser.userId ne p.userId }">
-				<a class="btn btn-danger" id="buy">구매</a>
-			</c:if>
-    			
-    		<a class="btn btn-danger" id="kakao">
-    			카페</a>
+    		<a class="btn btn-danger" id="kakao">구매</a>
 			
-			<a class="btn btn-danger" id="boot">
-    			boot</a>
+			<a class="btn btn-danger" id="cancel">구매취소</a>
 		</div>
 		<script>
 		function productUpdate(){
@@ -137,40 +131,10 @@
 		
 		</script>
 		
-<!-- 		<!-- 아임포트 --> -->
-<!-- 		<script type="text/javascript"> -->
-// 			$(document).ready(function(){
-// 				$("#buy").click(function(){
-// 					payment();
-// 				});
-// 			});
-				
-			
-// 			function payment(data) {
-// 				IMP.init('imp18673883');
-// 				IMP.request_pay({
-// 					pg: "kakaopay.TC0ONETIME", //pg사명 or pg사명.CID (잘못 입력할 경우, 기본 PG사가 띄워짐)
-// 			        pay_method: "card", //지불 방법
-// 			        merchant_uid:  'merchant_' + new Date().getTime(), //가맹점 주문번호 (아임포트를 사용하는 가맹점에서 중복되지 않은 임의의 문자열을 입력)
-// 			        name: ${p.productName }, //결제창에 노출될 상품명
-// 			        amount: ${p.productPrice }, //금액
-// 			        buyer_email : "testiamport@naver.com", 
-// 			        buyer_name : "홍길동",
-// 			        buyer_tel : "01012341234"
-// 				}, function(rsp) {q
-// 					if(rsp.success){
-// 						alert('결제 성공');
-// 						console.log('성공');
-// 					}else{
-// 						alert('실패');
-// 						console.log('실패');
-// 					}
-// 				});
-// 			}
-<!-- 		</script> -->
+
 		
 		<script>
-		<!-- 카카오 -->
+		<!-- 카카오 결제 -->
 		$(function(){
 			IMP.init('imp18673883');
 			$('#kakao').click(function(){
@@ -193,10 +157,29 @@
 		});
 			
 		</script>
-		
-		<!-- 부트 -->
+
 		<script>
-		
+		<!-- 카카오 취소 -->
+		$(function(){
+			IMP.init('imp18673883');
+			$('#cancel').click(function(){
+				$.ajax({
+					url:"cancel" ,
+					dataType: 'text' ,
+					success:function(data){
+						var box = data;
+						//console.log(data);
+						window.open(box);	
+						
+					},
+					error:function(error){
+						alert(error);
+						console.log(error);
+						console.log("jj");
+					}
+				});
+			});
+		});
 		</script>
 		
 

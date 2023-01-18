@@ -14,4 +14,10 @@ public interface OrderService {
 	//취소
 	int cancelOrder(orderCancel c);
 	
+	//취소(Y)로 update
+	int cancelUpdate();
+	
+
+	
+	
 }

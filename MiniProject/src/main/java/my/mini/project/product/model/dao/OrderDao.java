@@ -29,4 +29,9 @@ public class OrderDao {
 		return sqlSession.insert("cancelMapper.cancelOrder", c);
 	}
 
+	public int cancelUpdate(SqlSessionTemplate sqlSession) {
+
+		return sqlSession.update("cancelMapper.cancelUpdate");
+	}
+
 }

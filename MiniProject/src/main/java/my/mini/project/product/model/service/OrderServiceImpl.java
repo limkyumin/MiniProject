@@ -42,6 +42,14 @@ public class OrderServiceImpl implements OrderService {
 		
 		return cancel;
 	}
+
+	@Override
+	public int cancelUpdate() {
+		
+		int cancelUpdate = orderDao.cancelUpdate(sqlSession);
+		
+		return cancelUpdate;
+	}
 	
 
 	

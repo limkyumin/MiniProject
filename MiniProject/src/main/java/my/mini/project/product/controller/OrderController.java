@@ -18,6 +18,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,12 +107,22 @@ public class OrderController {
 				
 			*/
 			String input = change.readLine(); 
-			//{"tid":"T3bea397003e7c9849e0","tms_result":false,"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/aInfo","next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/mInfo","next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b/info","android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/6d418c9ce35792cff7b4c6708fb83d2921e0622142b13112250a3f030022012b","created_at":"2023-01-11T20:55:03"}
-			
+
 			JSONParser parser = new JSONParser();
 			JSONObject jsonObject = (JSONObject) parser.parse(input); 
 			//json 형태로 형변환
+			System.out.println("들어오는 값 : " + input);
+			/*tid":"T3c643ed4a466e29a6d9",
+			"tms_result":false,
+			"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/aInfo",
+			"next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/mInfo",
+			"next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/info",
+			"android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
+			"ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
+			"created_at":"2023-01-17T15:45:01"}
+			 */
 			
+			System.out.println(jsonObject.get("tax_free_amount")); //null
 			System.out.println(jsonObject.get("tid"));
 			//T3be99db003e7c98479f
 			System.out.println(jsonObject.get("next_redirect_pc_url"));
@@ -225,23 +236,21 @@ public class OrderController {
 			 * 주문정보 -> 결제정보 저장(새로운 테이블) 세팅해야한다.
 			 * new CancelVO???
 			*/
-			
+
 			orderCancel c = new orderCancel();
 			c.setCid(jsonObject.get("cid").toString());
-			c.setTid(jsonObject.get("tid").toString());		 //가맹정 코드
-														 //결제 고유번호
-			c.setCancel_amount(jsonObject.get("cancel_amount").toString());		 //취소금액!
-			c.setCancel_tax_free_amount(jsonObject.get("cancel_tax_free_amount").toString()); //취소 비과세 금액
+			c.setTid(jsonObject.get("tid").toString());		 
+			c.setPartner_order_id(jsonObject.get("partner_order_id").toString());
+			c.setCancel_amount(jsonObject.get("amount").toString());		 //취소금액!
+//			c.setCancel_tax_free_amount(jsonObject.get("cancel_tax_free_amount").toString()); //취소 비과세 금액
 //			c.setCancel_yn(jsonObject.get("cancel_yn").toString()); 	 //취소여부
 			
 			//ORDER_CANCEL 테이블에 저장하자.
 			int cancel = orderService.cancelOrder(c);
 		
-			
-			
-			System.out.println("tid" + selectTid);
+			System.out.println("하이 저장 잘대닝");
 	
-//			return (jsonObject.get("partner_order_id").toString()); 
+
 			return "";
 		} catch (MalformedURLException e) {
 			
@@ -255,9 +264,7 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	
-        
-        
-        
+
         //step 7.
         //카카오에서 결제성공시 나올 view 띄우기
 
@@ -265,5 +272,114 @@ public class OrderController {
 		
         return "";
 	}
+	
+	//취소 시작******************************************************************************
+	@ResponseBody
+	@RequestMapping("{partner_order_id}/cancel")
+//	@GetMapping("partner_order_id")
+	public String kakoCancel(@PathVariable("partner_order_id") String partner_order_id) {
+		try {
+			
+			
+			
+			//카카오에 결제모듈을 띄울 때 주문번호 객체 + "정보" 같이 보내준다
+			URL kakao = new URL("https://kapi.kakao.com/v1/payment/cancel"); //웹상주소 URL 선언
+			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
+			hrc.setRequestMethod("POST"); //포스트 방식
+			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
+			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+			hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
+			
+			String selectTid = orderService.selectTid(partner_order_id);
+			System.out.println("dddddddd : " + partner_order_id);
+			orderCancel c = new orderCancel();
+//			c.setCid(jsonObject.get("cid").toString());
+			c.setTid(partner_order_id);		
+			
+			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
+					+ "tid=" + selectTid + "&"
+					+ "partner_order_id=" + partner_order_id + "&" 	//가맹점 주문번호
+					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
+					+ "item_name=hi&"						//상품명
+					+ "quantity=1&"							//수량
+					+ "total_amount=1000&"					//가격
+					+ "vat_amount=200&"						//부가세
+					+ "tax_free_amount=0&"					//상품 비과세
+					+ "cancel_url=http://localhost:8989/project/cancel";			//결제 취소시
+			
+			OutputStream give = hrc.getOutputStream(); //주는애
+			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
+			giveData.writeBytes(kakaoParameter); // OutputStream은 데이터를 바이트 형식으로 주고 받기로 약속되어 있다. (형변환)
+			giveData.close(); // flush가 자동으로 호출이 되고 닫는다. (보내고 비우고 닫다)
+					
+			int result = hrc.getResponseCode(); // 잘됐나 안됐나 그 결과번호를 인트로 받는다
+			InputStream receive; //받는애
+			
+			if(result == 200) { //http 코드에서 200은 성공했을때의 코드임.
+				receive = hrc.getInputStream();
+			}else {
+				receive = hrc.getErrorStream(); //에러 확인은 200 말고 다른거해서 확인해보기.
+			}
+		
+			// 읽는 부분
+			InputStreamReader read = new InputStreamReader(receive); // 받은걸 읽는다.
+			BufferedReader change = new BufferedReader(read); // 바이트를 읽기 위해 형변환 버퍼리더는 실제로 형변환을 위해 존제하는 클레스는 아니다.
+			// 받는 부분
+			
+			String input = change.readLine(); 
+
+			JSONParser parser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) parser.parse(input); 
+			//json 형태로 형변환
+			System.out.println("들어오는 값 : " + input);
+			/*tid":"T3c643ed4a466e29a6d9",
+			"tms_result":false,
+			"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/aInfo",
+			"next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/mInfo",
+			"next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/info",
+			"android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
+			"ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
+			"created_at":"2023-01-17T15:45:01"}
+			 */
+			
+			/*결제 취소
+			1) tid를 select 진행 후 tid를 카카오에 넘겨야 함(tid는 카카오에서 pk개념임)
+			tid를 select 할 때는 orderNo(유니크값)로 가져와야 함.
+			*/
+			Order o = new Order();
+			
+			
+//			String selectTid = orderService.selectTid(partner_order_id);
+			
+			System.out.println("오더넘버 잘가져오니?: "+partner_order_id);
+
+//			orderCancel c = new orderCancel();
+////			c.setCid(jsonObject.get("cid").toString());
+//			c.setTid(jsonObject.get("tid").toString());		 
+//			c.setPartner_order_id(jsonObject.get("partner_order_id").toString());
+//			c.setCancel_amount(jsonObject.get("amount").toString());		 //취소금액!
+//			c.setCancel_tax_free_amount(jsonObject.get("cancel_tax_free_amount").toString()); //취소 비과세 금액
+//			String cancel_yn = "u";
+			
+			//cancel_yn -> Y(취소)으로 업데이트하기
+			int cancelUpdate = orderService.cancelUpdate();
+			
+			return (jsonObject.get("next_redirect_pc_url").toString());  
+			
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	
+	
+
 	
 }

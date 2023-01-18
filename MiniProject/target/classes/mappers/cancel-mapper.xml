@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="CID" property="cid"/>
 		<result column="TID" property="tid"/>
 		<result column="CANCEL_AMOUNT" property="cancel_amount"/>
-		<result column="CANCEL_TAX_FREE_AMOUNT" property="cancel_tax_free_amount"/>
+		<result column="PARTNER_ORDER_ID" property="partner_order_id"/>
 		<result column="CANCEL_YN" property="cancel_yn"/>
 	</resultMap>
 
@@ -19,19 +19,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 								CID,
 								TID,
 								CANCEL_AMOUNT,
-								CANCEL_TAX_FREE_AMOUNT,
-								CANCEL_YN
+								PARTNER_ORDER_ID
 								)
 							VALUES(
 									#{cid},
 									#{tid},
 									#{cancel_amount},
-									#{cancel_tax_free_amount},
-									#{cancel_yn}
+									#{partner_order_id}
 							)
 	</insert>
 
-
+	<update id="cancelUpdate" parameterType="cancel">
+		UPDATE ORDER_CANCEL
+		SET CANCEL_YN = #{cancel_yn}
+		WHERE CANCEL_YN = 'Y'
+	</update>
 
 
 </mapper>
