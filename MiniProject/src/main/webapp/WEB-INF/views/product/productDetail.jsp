@@ -164,6 +164,10 @@
 			IMP.init('imp18673883');
 			$('#cancel').click(function(){
 				$.ajax({
+					data:{
+						partner_order_id: "2023011918075",
+						tid: "2023011918075"
+					},
 					url:"cancel" ,
 					dataType: 'text' ,
 					success:function(data){
@@ -175,7 +179,7 @@
 					error:function(error){
 						alert(error);
 						console.log(error);
-						console.log("jj");
+						console.log("에러뜨나요ㅛㅛㅛㅛㅛㅛㅛㅛㅛ");
 					}
 				});
 			});

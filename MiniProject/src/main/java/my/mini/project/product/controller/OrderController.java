@@ -77,7 +77,7 @@ public class OrderController {
 					+ "approval_url=http://localhost:8989/project/" + orderNo + "/productMain.ui&"	//결제 성공시
 //					+ "approval_url=http://localhost:8989/project/productMain.ui&"
 					+ "fail_url=http://localhost:8989/productSell.ui&"				//결제 실패시
-					+ "cancel_url=http://localhost:8989/productSell.ui";			//결제 취소시
+					+ "cancel_url=http://localhost:8989/project/" + orderNo + "/productMain.ui";			//결제 취소시
 			
 			OutputStream give = hrc.getOutputStream(); //주는애
 			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
@@ -231,6 +231,10 @@ public class OrderController {
 			 * "created_at":"2023-01-16T19:25:34",
 			 * "approved_at":"2023-01-16T19:26:16"}
 			 * */
+			
+			
+			
+			
 			/* 취소 step1)
 	
 			 * 주문정보 -> 결제정보 저장(새로운 테이블) 세팅해야한다.
@@ -248,10 +252,11 @@ public class OrderController {
 			//ORDER_CANCEL 테이블에 저장하자.
 			int cancel = orderService.cancelOrder(c);
 		
-			System.out.println("하이 저장 잘대닝");
+			System.out.println("orderCancel 저장 잘되는지 확인");
 	
 
 			return "";
+			
 		} catch (MalformedURLException e) {
 			
 			e.printStackTrace();
@@ -275,11 +280,27 @@ public class OrderController {
 	
 	//취소 시작******************************************************************************
 	@ResponseBody
-	@RequestMapping("{partner_order_id}/cancel")
-//	@GetMapping("partner_order_id")
-	public String kakoCancel(@PathVariable("partner_order_id") String partner_order_id) {
+	@GetMapping("{partner_order_id}/productMain.ui")
+	@RequestMapping("cancel")
+	public String kakoCancel(
+//			@RequestParam("pg_token") String pg_token,
+		/*	@PathVariable("partner_order_id")*/ String partner_order_id, String tid) {
+		
+		
 		try {
 			
+			/*DB에서 tid 를 꺼내와야 한다(select)
+			1) tid를 select 진행 후 tid를 카카오에 넘겨야 함(tid는 카카오에서 pk개념임)
+				tid를 select 할 때는 orderNo(유니크값)로 가져와야 함.
+			 */
+			String selectTid = orderService.selectTid(partner_order_id);
+			Order o = new Order();
+			o.setPartner_order_id(partner_order_id);
+			o.setTid(tid);
+			System.out.println("111111111 : " + partner_order_id);
+			System.out.println("22222222222 : " + tid);
+//			orderCancel c = new orderCancel();
+//			c.setTid(partner_order_id.toString());
 			
 			
 			//카카오에 결제모듈을 띄울 때 주문번호 객체 + "정보" 같이 보내준다
@@ -289,23 +310,19 @@ public class OrderController {
 			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
 			hrc.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 			hrc.setDoOutput(true); //이 연결을통해 서버에게 전해줄것이 있는지 없는지, 내보낼 것이 있다 그래서 true 이것은 생성될때 input은 자동적으로 true라 인풋 선언 필요없다 하지만 아웃풋은 false기 때문에 true로 선언
-			
-			String selectTid = orderService.selectTid(partner_order_id);
-			System.out.println("dddddddd : " + partner_order_id);
-			orderCancel c = new orderCancel();
-//			c.setCid(jsonObject.get("cid").toString());
-			c.setTid(partner_order_id);		
+
 			
 			String kakaoParameter = "cid=TC0ONETIME&" 		//가맹점 코드
-					+ "tid=" + selectTid + "&"
+					+ "tid=" + tid + "&"
 					+ "partner_order_id=" + partner_order_id + "&" 	//가맹점 주문번호
 					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
-					+ "item_name=hi&"						//상품명
-					+ "quantity=1&"							//수량
-					+ "total_amount=1000&"					//가격
-					+ "vat_amount=200&"						//부가세
-					+ "tax_free_amount=0&"					//상품 비과세
-					+ "cancel_url=http://localhost:8989/project/cancel";			//결제 취소시
+					+ "cancel_amount=1000&"
+					+ "cancel_tax_free_amount=cancel_tax_free_amount&"
+					+ "cancel_url=http://localhost:8989/project/" + partner_order_id + "/productMain.ui";			//결제 취소시
+			
+			System.out.println("33333333: " + partner_order_id);
+			System.out.println("44444444: " + tid);
+			System.out.println("전달하는 카카오파라메터 확인 : " + kakaoParameter);
 			
 			OutputStream give = hrc.getOutputStream(); //주는애
 			DataOutputStream giveData = new DataOutputStream(give);//데이터를 준다
@@ -332,40 +349,12 @@ public class OrderController {
 			JSONObject jsonObject = (JSONObject) parser.parse(input); 
 			//json 형태로 형변환
 			System.out.println("들어오는 값 : " + input);
-			/*tid":"T3c643ed4a466e29a6d9",
-			"tms_result":false,
-			"next_redirect_app_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/aInfo",
-			"next_redirect_mobile_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/mInfo",
-			"next_redirect_pc_url":"https://online-pay.kakao.com/mockup/v1/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8/info",
-			"android_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
-			"ios_app_scheme":"kakaotalk://kakaopay/pg?url=https://online-pay.kakao.com/pay/mockup/7304c80af93faa9fdd4e64b09b29c4c62a631bc8e506b83f4d399f7c9e2f18b8",
-			"created_at":"2023-01-17T15:45:01"}
-			 */
-			
-			/*결제 취소
-			1) tid를 select 진행 후 tid를 카카오에 넘겨야 함(tid는 카카오에서 pk개념임)
-			tid를 select 할 때는 orderNo(유니크값)로 가져와야 함.
-			*/
-			Order o = new Order();
-			
-			
-//			String selectTid = orderService.selectTid(partner_order_id);
-			
-			System.out.println("오더넘버 잘가져오니?: "+partner_order_id);
-
-//			orderCancel c = new orderCancel();
-////			c.setCid(jsonObject.get("cid").toString());
-//			c.setTid(jsonObject.get("tid").toString());		 
-//			c.setPartner_order_id(jsonObject.get("partner_order_id").toString());
-//			c.setCancel_amount(jsonObject.get("amount").toString());		 //취소금액!
-//			c.setCancel_tax_free_amount(jsonObject.get("cancel_tax_free_amount").toString()); //취소 비과세 금액
-//			String cancel_yn = "u";
 			
 			//cancel_yn -> Y(취소)으로 업데이트하기
 			int cancelUpdate = orderService.cancelUpdate();
 			
 			return (jsonObject.get("next_redirect_pc_url").toString());  
-			
+			//리턴 url은 어떻게 하지..
 			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
