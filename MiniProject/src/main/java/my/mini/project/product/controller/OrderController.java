@@ -304,7 +304,7 @@ public class OrderController {
 			
 			
 			//카카오에 결제모듈을 띄울 때 주문번호 객체 + "정보" 같이 보내준다
-			URL kakao = new URL("https://kapi.kakao.com/v1/payment/cancel"); //웹상주소 URL 선언
+			URL kakao = new URL("https://kapi.kakao.com/v4/payment/cancel"); //웹상주소 URL 선언
 			HttpURLConnection hrc = (HttpURLConnection) kakao.openConnection();   //요청하는 클라이언트, 서버연결을 해주는것.
 			hrc.setRequestMethod("POST"); //포스트 방식
 			hrc.setRequestProperty("Authorization", "KakaoAK 7a96f0ac17cb9603eaa371eb185eef21"); //	내 어드민 주소 7a96f0ac17cb9603eaa371eb185eef21
@@ -317,7 +317,7 @@ public class OrderController {
 					+ "partner_order_id=" + partner_order_id + "&" 	//가맹점 주문번호
 					+ "partner_user_id=partner_user_id&" 	//가맹점 회원 아이디
 					+ "cancel_amount=1000&"
-					+ "cancel_tax_free_amount=cancel_tax_free_amount&"
+					+ "cancel_tax_free_amount=0&"
 					+ "cancel_url=http://localhost:8989/project/" + partner_order_id + "/productMain.ui";			//결제 취소시
 			
 			System.out.println("33333333: " + partner_order_id);
@@ -353,9 +353,10 @@ public class OrderController {
 			//cancel_yn -> Y(취소)으로 업데이트하기
 			int cancelUpdate = orderService.cancelUpdate();
 			
-			return (jsonObject.get("next_redirect_pc_url").toString());  
+			System.out.println("매퍼 업뎃은 ? : " + cancelUpdate);
+			return (jsonObject.get("http://localhost:8989/").toString());  
 			//리턴 url은 어떻게 하지..
-			
+			//리턴url 수정하기....
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -165,8 +165,8 @@
 			$('#cancel').click(function(){
 				$.ajax({
 					data:{
-						partner_order_id: "2023011918075",
-						tid: "2023011918075"
+						partner_order_id: "20230119180705",
+						tid: "T3c90839003e7c98b6ae"
 					},
 					url:"cancel" ,
 					dataType: 'text' ,
