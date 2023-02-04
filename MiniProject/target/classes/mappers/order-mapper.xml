@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="orderMapper">
+	
+	<resultMap type="Order" id="orderResultSet">
+		<result column="PARTNER_ORDER_ID" property="partner_order_id"/>
+		<result column="TID" property="tid"/>
+	</resultMap>
+
+	<insert id="insertOrderTemp" parameterType="Order">
+		INSERT INTO ORDER_TEST(
+								PARTNER_ORDER_ID,
+								TID
+								)
+							VALUES(
+									#{partner_order_id},
+									#{tid}
+							)
+	</insert>
+
+
+
+	<select id="selectTid" parameterType="String" resultType="String">
+	
+		SELECT TID
+        FROM ORDER_TEST
+        WHERE PARTNER_ORDER_ID = #{partner_order_id}
+	
+	</select>
+<!-- 	SELECT TID -->
+<!-- 			FROM( -->
+<!-- 			    SELECT TID -->
+<!-- 			    FROM ORDER_TEST -->
+<!-- 			    ORDER BY ROWNUM DESC -->
+<!-- 			) -->
+<!-- 		WHERE ROWNUM = 1 -->
+
+
+
+</mapper>

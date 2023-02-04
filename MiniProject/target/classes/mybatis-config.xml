@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+
+	<typeAliases>
+	
+		<typeAlias type="my.mini.project.user.model.vo.User" alias="user"/>
+		<typeAlias type="my.mini.project.notice.model.vo.Notice" alias="notice"/>
+		<typeAlias type="my.mini.project.product.model.vo.Product" alias="product"/>
+		<typeAlias type="my.mini.project.product.model.vo.Order" alias="order"/>
+		<typeAlias type="my.mini.project.product.model.vo.orderCancel" alias="cancel"/>
+<!-- 		<typeAlias type="my.mini.project.kakao.model.vo.*" alias="kakao"/> -->
+	</typeAliases>
+	
+	<!-- 
+			environment,dataSource에 기술했던 DB연결정보는 root-context.xml에 작성한다
+			-> DB등록은 서버연동과 동시에 이루어져야하기 때문에
+				서버 연결과 동시에 읽혀지는 root-context.xml에 기술하는 것
+	 -->
+	 
+	 
+	 
+	<mappers>
+		<mapper resource="/mappers/user-mapper.xml"/>
+		<mapper resource="/mappers/notice-mapper.xml"/>
+		<mapper resource="/mappers/product-mapper.xml"/>
+		<mapper resource="/mappers/order-mapper.xml"/>
+		<mapper resource="/mappers/cancel-mapper.xml"/>
+	<!-- 	<mapper resource="/mappers/member-mapper.xml"/>	
+		<mapper resource="/mappers/board-mapper.xml"/>  -->
+	</mappers>
+
+
+</configuration>
